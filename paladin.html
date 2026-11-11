@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hawary's Paladin Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Plan: cool cathedral stone + paladin gold, holy blue as second voice.
+   Layout: sticky chip nav, one reading column (~760px), wide tables scroll in their own box. */
+:root{
+  --bg:#f3f4f7;
+  --surface:#ffffff;
+  --ink:#1a1f2c;
+  --muted:#596276;
+  --line:#d8dce6;
+  --gold:#8a5d00;
+  --gold-soft:#f6ecd4;
+  --holy:#2c5bb0;
+  --holy-soft:#e6eefc;
+  --ret:#a3261f; --ret-soft:#fbe9e7;
+  --prot:#2c5bb0; --prot-soft:#e6eefc;
+  --heal:#8a6a00; --heal-soft:#f8f0d6;
+  --warn:#9a5b00; --warn-soft:#fff3dc;
+  --ok:#1f7a45; --ok-soft:#e3f5ea;
+  --code-bg:#121725; --code-ink:#e8ecf6;
+  --display:"Cinzel", "Trajan Pro", Georgia, serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f121a; --surface:#171b26; --ink:#e7eaf2; --muted:#a3abbd; --line:#2a3142;
+    --gold:#e2b54c; --gold-soft:#2b2412; --holy:#93b3ff; --holy-soft:#18213a;
+    --ret:#ff8d84; --ret-soft:#33191a; --prot:#93b3ff; --prot-soft:#18213a; --heal:#e8c35a; --heal-soft:#2b2512;
+    --warn:#f2b45a; --warn-soft:#2e2412; --ok:#6fd49a; --ok-soft:#14291e;
+    --code-bg:#0a0d14; --code-ink:#e8ecf6;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f121a; --surface:#171b26; --ink:#e7eaf2; --muted:#a3abbd; --line:#2a3142;
+  --gold:#e2b54c; --gold-soft:#2b2412; --holy:#93b3ff; --holy-soft:#18213a;
+  --ret:#ff8d84; --ret-soft:#33191a; --prot:#93b3ff; --prot-soft:#18213a; --heal:#e8c35a; --heal-soft:#2b2512;
+  --warn:#f2b45a; --warn-soft:#2e2412; --ok:#6fd49a; --ok-soft:#14291e;
+  --code-bg:#0a0d14; --code-ink:#e8ecf6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-text-size-adjust:100%}
+a{color:var(--holy)}
+a:focus-visible,button:focus-visible,input:focus-visible,label:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);line-height:1.2;text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,6vw,44px);letter-spacing:.02em}
+h2{font-size:clamp(22px,4.4vw,30px);letter-spacing:.02em}
+h3{font-size:19px;letter-spacing:.03em;margin-top:6px}
+p{margin:0}
+.wrap{max-width:780px;margin:0 auto;padding:0 18px}
+
+/* header */
+header.top{border-bottom:1px solid var(--line);background:var(--surface)}
+header.top .wrap{padding-top:34px;padding-bottom:26px;display:grid;gap:14px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.lede{color:var(--muted);font-size:18px;max-width:62ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:6px}
+.fact{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.fact b{display:block;font-family:var(--display);font-size:20px;color:var(--gold);font-variant-numeric:tabular-nums}
+.fact span{font-size:14px;color:var(--muted)}
+
+/* nav */
+nav.jump{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav.jump .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.jump .wrap::-webkit-scrollbar{display:none}
+nav.jump a{flex:0 0 auto;text-decoration:none;color:var(--ink);font-size:14px;font-weight:600;border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:999px}
+nav.jump a:hover{border-color:var(--gold);color:var(--gold)}
+
+/* sections */
+main section{padding:40px 0 8px}
+.sec-head{display:grid;gap:6px;margin-bottom:16px}
+.step{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.stack{display:grid;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:10px}
+.card.spec-ret{border-top:4px solid var(--ret)}
+.card.spec-prot{border-top:4px solid var(--prot)}
+.card.spec-holy{border-top:4px solid var(--heal)}
+.callout{border-left:4px solid var(--gold);background:var(--gold-soft);padding:12px 14px;border-radius:0 10px 10px 0}
+.callout.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.callout.blue{border-left-color:var(--holy);background:var(--holy-soft)}
+ul,ol{margin:0;padding-left:22px;display:grid;gap:6px}
+li::marker{color:var(--gold)}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.pill{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:999px;vertical-align:middle;white-space:nowrap}
+.pill.ret{background:var(--ret-soft);color:var(--ret)}
+.pill.prot{background:var(--prot-soft);color:var(--prot)}
+.pill.holy{background:var(--heal-soft);color:var(--heal)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.gold{background:var(--gold-soft);color:var(--gold)}
+.split{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--gold);font-variant-numeric:tabular-nums}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:520px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--bg);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td .src{display:block;font-size:13px;color:var(--muted)}
+
+/* talents */
+.talents{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.tree{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.tree h4{margin:0 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.tree ul{list-style:none;padding:0;gap:3px}
+.tree li{display:flex;justify-content:space-between;gap:8px;font-size:15px}
+.tree li span:last-child{font-family:var(--mono);font-size:13px;color:var(--gold);font-variant-numeric:tabular-nums}
+
+/* macros */
+.macro{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.macro .mh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
+.macro .mh b{font-size:16px}
+.macro .mh p{font-size:14px;color:var(--muted);margin-top:2px}
+.macro pre{margin:0;background:var(--code-bg);color:var(--code-ink);font-family:var(--mono);font-size:13.5px;line-height:1.55;padding:12px 14px;overflow-x:auto;white-space:pre}
+button.copy{flex:0 0 auto;font:600 13px var(--body);border:1px solid var(--gold);color:var(--gold);background:transparent;border-radius:8px;padding:6px 12px;cursor:pointer;min-height:36px}
+button.copy:hover{background:var(--gold-soft)}
+button.copy.done{border-color:var(--ok);color:var(--ok)}
+
+/* checklist */
+.check{display:grid;gap:6px}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer}
+.check input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--gold);flex:0 0 auto}
+.check label .lv{font-family:var(--mono);font-size:13px;color:var(--gold);min-width:36px;font-variant-numeric:tabular-nums}
+.check input:checked ~ span{color:var(--muted);text-decoration:line-through}
+.progress{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.bar{flex:1;height:8px;border-radius:999px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .2s}
+@media (prefers-reduced-motion: reduce){.bar i{transition:none}}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:620px){.two{grid-template-columns:1fr}}
+
+/* help window */
+.helpfab{position:fixed;right:16px;bottom:16px;z-index:20;display:flex;align-items:center;gap:8px;min-height:48px;padding:10px 18px;border-radius:999px;border:0;background:var(--gold);color:var(--bg);font:700 15px var(--body);cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.helpfab:hover{filter:brightness(1.08)}
+.helpfab svg{width:20px;height:20px}
+dialog.help{width:min(940px,100vw);max-width:100vw;height:min(92vh,1000px);max-height:100vh;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink)}
+dialog.help::backdrop{background:rgba(6,9,16,.6)}
+@media (max-width:640px){dialog.help{width:100vw;height:100%;max-height:100%;border-radius:0;border:0;margin:0}}
+.help-inner{display:flex;flex-direction:column;height:100%}
+.help-top{background:var(--surface);border-bottom:1px solid var(--line);padding:14px 18px 12px;display:grid;gap:10px}
+.help-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.help-title h2{font-size:clamp(20px,4vw,26px)}
+.xbtn{flex:0 0 auto;min-width:44px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:700 15px var(--body);cursor:pointer}
+.xbtn:hover{border-color:var(--gold);color:var(--gold)}
+.search{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 12px}
+.search input{flex:1;min-height:44px;border:0;background:transparent;color:var(--ink);font:16px var(--body)}
+.search input:focus{outline:none}
+.search:focus-within{outline:3px solid var(--gold);outline-offset:1px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:0 0 auto;font:600 13px var(--body);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 11px;cursor:pointer}
+.chips button:hover{border-color:var(--gold);color:var(--gold)}
+.help-body{flex:1;overflow-y:auto;padding:16px 18px 48px;display:grid;gap:18px;align-content:start}
+.help-group{display:grid;gap:8px}
+.help-group > h3{font-size:16px;color:var(--gold);margin:6px 0 0}
+.fixes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+.fixes button{text-align:left;display:grid;gap:2px;border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--surface);color:var(--ink);border-radius:8px;padding:10px 12px;cursor:pointer;font:15px var(--body)}
+.fixes button b{font-weight:700}
+.fixes button span{font-size:13px;color:var(--muted)}
+.fixes button:hover{border-color:var(--gold)}
+details.topic{border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+details.topic > summary{cursor:pointer;padding:12px 14px;list-style:none;display:grid;gap:2px;border-radius:10px}
+details.topic > summary::-webkit-details-marker{display:none}
+details.topic > summary .t{font-weight:700;display:flex;justify-content:space-between;gap:10px}
+details.topic > summary .t::after{content:"+";color:var(--gold);font-weight:700}
+details.topic[open] > summary .t::after{content:"−"}
+details.topic > summary .a{font-size:14px;color:var(--muted)}
+details.topic[open] > summary{border-bottom:1px solid var(--line);border-radius:10px 10px 0 0}
+details.topic .tb{padding:12px 14px 14px;display:grid;gap:10px;font-size:16px}
+details.topic.hit{border-color:var(--gold)}
+figure.fig{margin:0;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:10px;overflow-x:auto}
+figure.fig svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
+figure.fig.wide svg{min-width:560px;max-width:none}
+.vis{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
+.vis.keys{grid-template-columns:repeat(auto-fit,minmax(76px,1fr))}
+.vcell{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:10px 8px;text-align:center;display:grid;gap:4px;align-content:start;justify-items:center}
+.vcell .ct{font-weight:700;font-size:14px;line-height:1.3}
+.vcell .cs{font-size:13px;color:var(--muted);line-height:1.35}
+.glyph{font:700 46px/1 Georgia,"Times New Roman",serif;text-shadow:0 0 2px #111,1px 1px 0 #111,-1px -1px 0 #111,1px -1px 0 #111,-1px 1px 0 #111,0 2px 0 #111}
+.sw{width:100%;min-height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:14px}
+.keycap{display:grid;place-items:center;width:52px;height:48px;border:1.5px solid var(--ink);border-bottom-width:4px;border-radius:8px;background:var(--bg);font:700 22px var(--mono);color:var(--ink)}
+.keycap.gold{border-color:var(--gold);color:var(--gold)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.steps{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));counter-reset:st}
+.steps div{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:10px 12px;display:grid;gap:2px;font-size:14px}
+.steps div::before{counter-increment:st;content:counter(st);font:700 12px var(--mono);color:var(--bg);background:var(--gold);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;margin-bottom:4px}
+.steps div:last-child{border-color:var(--gold)}
+.steps b{font-size:15px}
+.steps span{color:var(--muted)}
+figure.fig figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+.s-ink{fill:var(--ink)} .s-mut{fill:var(--muted)} .s-surf{fill:var(--surface)} .s-bg{fill:var(--bg)}
+.s-line{stroke:var(--line)} .s-inkst{stroke:var(--ink)} .s-gold{fill:var(--gold)} .s-goldst{stroke:var(--gold)}
+.s-holy{fill:var(--holy-soft);stroke:var(--holy)}
+svg text{font-family:var(--body)}
+.kbd{font-family:var(--mono);font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;background:var(--bg)}
+.calc{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.calc label{display:grid;gap:4px;font-size:14px;color:var(--muted)}
+.calc input{width:120px;min-height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:16px var(--body);padding:0 10px;font-variant-numeric:tabular-nums}
+.calc output{font-family:var(--display);font-size:22px;color:var(--gold);font-variant-numeric:tabular-nums}
+.empty{display:none;color:var(--muted);text-align:center;padding:30px 0}
+.help-note{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+[hidden]{display:none !important}
+
+.brand{display:flex;align-items:center;gap:12px}
+.crest{flex:0 0 auto;width:clamp(30px,6vw,42px);height:auto}
+.crest text{font-family:var(--display);font-weight:700;font-size:19px;fill:var(--bg)}
+.crest .crest-in{stroke:var(--bg);stroke-width:1.2;opacity:.55}
+/* views, tabs, search */
+main section{padding:22px 0 8px}
+body:not(.home) header.top .lede, body:not(.home) header.top .facts{display:none}
+body:not(.home) header.top .wrap{padding-top:14px;padding-bottom:12px;gap:4px}
+body:not(.home) header.top h1{font-size:clamp(20px,4.6vw,28px)}
+nav.jump .wrap a.on{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+nav.jump .wrap a.helplink{border-color:var(--holy);color:var(--holy)}
+.navbtn{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;font:700 14px var(--body);border:1px solid var(--gold);color:var(--gold);background:var(--surface);padding:6px 12px;border-radius:999px;cursor:pointer}
+.navbtn[aria-expanded="true"]{background:var(--gold);color:var(--bg)}
+nav.jump .wrap.gs-row{display:grid;gap:8px;padding-top:0;padding-bottom:12px;overflow:visible}
+.gs-row input{width:100%;min-height:46px;border:1px solid var(--gold);border-radius:10px;background:var(--surface);color:var(--ink);font:16px var(--body);padding:0 14px}
+.gs-res{display:grid;gap:6px;max-height:min(60vh,520px);overflow-y:auto}
+.gs-res button{text-align:left;display:grid;gap:2px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:9px 12px;cursor:pointer;font:15px var(--body)}
+.gs-res button:hover{border-color:var(--gold)}
+.gs-res small{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.gs-res span{font-size:13px;color:var(--muted);line-height:1.4}
+.gs-none{color:var(--muted);font-size:14px;margin:4px 0}
+.bigsearch{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;border:1px solid var(--gold);border-radius:12px;background:var(--surface);color:var(--muted);font:16px var(--body);padding:0 16px;cursor:pointer;text-align:left}
+.bigsearch svg{color:var(--gold)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.tile{display:grid;gap:3px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:12px 14px;min-height:72px}
+.tile b{font-size:16px}
+.tile span{font-size:13px;color:var(--muted);line-height:1.35}
+.tile:hover{border-color:var(--gold)}
+.tile.help{border-left-color:var(--holy)}
+.subtabs{position:sticky;top:53px;z-index:4;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;background:var(--bg);border-bottom:1px solid var(--line)}
+.subtabs::-webkit-scrollbar{display:none}
+.subtabs button{flex:0 0 auto;font:700 15px var(--body);background:transparent;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:8px 12px;cursor:pointer;min-height:44px}
+.subtabs button:hover{color:var(--ink)}
+.subtabs button.on{color:var(--ink);border-bottom-color:var(--gold)}
+.panel{display:grid;gap:14px}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:28px;padding-top:14px;border-top:1px solid var(--line)}
+.pager a{display:grid;gap:2px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 14px;max-width:48%}
+.pager a:hover{border-color:var(--gold)}
+.pager a.next{margin-left:auto;text-align:right}
+.pager a span{font-size:12px;color:var(--muted)}
+.pager a b{font-size:15px}
+.chips button.on{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+
+.grade{display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:7px;font:800 15px var(--body);line-height:1}
+.grade.s{background:#e8b923;color:#1a1a1a}
+.grade.a{background:#2f8f47;color:#fff}
+.grade.b{background:#2c5bb0;color:#fff}
+.grade.c{background:#7c828d;color:#fff}
+.ratings{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--muted)}
+.ratings span{display:inline-flex;align-items:center;gap:6px}
+table.rate td{vertical-align:middle}
+table.rate td .src{margin-top:4px}
+.card.spec-shock{border-top:4px solid #8a5bd6}
+.pill.shock{background:#efe7fb;color:#6b3fb8}
+:root[data-theme="dark"] .pill.shock{background:#251b38;color:#c9a8ff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pill.shock{background:#251b38;color:#c9a8ff}}
+@media (max-width:640px){
+  table.rate{min-width:0}
+  table.rate thead{display:none}
+  table.rate tr{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 12px;padding:14px;border-bottom:1px solid var(--line)}
+  table.rate tbody tr:last-child{border-bottom:0}
+  table.rate td{display:block;border:0;padding:0;background:none}
+  table.rate td:first-child{grid-column:1/-1}
+  table.rate.cmp td:nth-child(3){grid-column:span 2}
+  table.rate td[data-l]:not([data-l=""])::before{content:attr(data-l);display:block;font:700 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+}
+footer{border-top:1px solid var(--line);margin-top:48px;padding:28px 0 60px;background:var(--surface)}
+.sources{columns:2 260px;column-gap:24px;font-size:14px;padding-left:18px}
+.sources li{break-inside:avoid;margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="kicker">Hawary's Guide · WoW Forever · Updated for the Nov 9–10, 2026 hotfixes</div>
+    <h1 class="brand"><svg class="crest" viewBox="0 0 40 46" aria-hidden="true"><path d="M20 2 L37 8 V22 C37 33 29 40 20 44 C11 40 3 33 3 22 V8 Z" class="s-gold"/><path d="M20 6 L33 10.5 V22 C33 31 27 36.5 20 40 C13 36.5 7 31 7 22 V10.5 Z" fill="none" class="crest-in"/><text x="20" y="30" text-anchor="middle">H</text></svg><span>Hawary's Paladin Guide</span></h1>
+    <p class="lede">Your Paladin, from character creation to raid night. Pick a section below, or search.</p>
+  </div>
+</header>
+
+<nav class="jump" aria-label="Jump to section">
+  <div class="wrap">
+    <button class="navbtn" id="gsBtn" type="button" aria-expanded="false" aria-controls="gsRow">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      Search
+    </button>
+    <a href="#quick">Home</a>
+    <a href="#race">Race</a>
+    <a href="#kit">Your kit</a>
+    <a href="#video">Video check</a>
+    <a href="#leveling">Leveling</a>
+    <a href="#builds">Builds</a>
+    <a href="#macros">Macros</a>
+    <a href="#gear">Gear</a>
+    <a href="#endgame">Endgame</a>
+    <a href="#pvp">PvP</a>
+    <a href="#sources">Sources</a>
+    <a href="#help" class="helplink">Stuck? Help</a>
+  </div>
+  <div class="wrap gs-row" id="gsRow" hidden>
+    <input id="gsIn" type="search" placeholder="Search the whole guide: taunt, mount, Holy Shock, bags…" aria-label="Search the whole guide" autocomplete="off">
+    <div class="gs-res" id="gsRes" hidden></div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- QUICK START -->
+<section id="quick" class="view">
+  <div class="sec-head">
+    <div class="step">Start here</div>
+    <h2>Where do you want to go?</h2>
+  </div>
+  <div class="stack">
+    <button class="bigsearch" type="button" id="homeSearch">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Search the whole guide
+    </button>
+    <div class="tiles">
+      <a class="tile" href="#leveling"><b>Leveling 1–60</b><span>Talent order, rotation, zones, weapons</span></a>
+      <a class="tile" href="#builds"><b>Level 60 builds</b><span>Ret, Prot, Holy, Shockadin, plus ratings</span></a>
+      <a class="tile" href="#macros"><b>Macros</b><span>Copy and paste, by spec</span></a>
+      <a class="tile" href="#gear"><b>Gear</b><span>Pre-raid lists, enchants, professions</span></a>
+      <a class="tile" href="#race"><b>Pick your race</b><span>Human, Dwarf or Undead</span></a>
+      <a class="tile" href="#kit"><b>Your toolkit</b><span>Seals, auras, blessings</span></a>
+      <a class="tile" href="#video"><b>Video check</b><span>What changed since your video</span></a>
+      <a class="tile" href="#endgame"><b>Endgame</b><span>Before raids open Dec 9</span></a>
+      <a class="tile" href="#pvp"><b>PvP</b><span>Duel game plan</span></a>
+      <a class="tile help" href="#help"><b>Stuck? Help</b><span>Beginner questions, with pictures</span></a>
+    </div>
+    <div class="facts">
+      <div class="fact"><b>14.4%</b><span>of characters are Paladins, the most played class (Nov 7 sample)</span></div>
+      <div class="fact"><b>7.3%</b><span>are Undead Paladins, the single most popular race and class combo</span></div>
+      <div class="fact"><b>Lv 40</b><span>Plate armor, Dual Specialization and your first mount</span></div>
+      <div class="fact"><b>Dec 9</b><span>Raids open: Barrow Deeps (10), Hyjal Summit (20), Onyxia's Lair (40)</span></div>
+    </div>
+    <h3>The two-minute version</h3>
+    <div class="card">
+      <ol>
+        <li><b>Race:</b> Human on Alliance, or Undead on Horde. Undead is the only Horde option. Dwarf is the tank-leaning Alliance alternative.</li>
+        <li><b>Level as Retribution</b> with a slow two-handed weapon. Every guide checked agrees on this for solo questing.</li>
+        <li><b>Rotation while leveling:</b> keep a Seal up, Judge on cooldown, Holy Strike on cooldown, and add Consecration on 2+ mobs from level 20.</li>
+        <li><b>Weapon upgrades come first.</b> Gear has an outsized effect on Forever leveling speed. Your level 20 class quest gives Verigan's Fist (Alliance) or Wolfsbane (Undead).</li>
+        <li><b>At 40</b> you get plate, Dual Spec and riding. Set up a second spec for dungeons (Prot or Holy).</li>
+        <li><b>At 60</b> pick your raid role, farm reputation and the pre-raid list below, and get attuned before December 9.</li>
+      </ol>
+    </div>
+    <div class="callout blue small">
+      <b>Re-drag spells after every trainer visit.</b> In Forever a spell sitting on your action bar does not jump to the new rank when you buy it. Drag it out of the spellbook again, or you will be casting rank 1 at level 30.
+    </div>
+  </div>
+</section>
+
+<!-- RACE -->
+<section id="race" class="view">
+  <div class="sec-head">
+    <div class="step">Step 1 · Character creation</div>
+    <h2>Pick your race</h2>
+    <p class="muted">Only three races can be Paladins. The new Skyborne race cannot.</p>
+  </div>
+  <div class="stack">
+    <div class="tbl"><table>
+      <thead><tr><th>Race</th><th>Faction</th><th>Racials that matter for Paladin</th><th>Best for</th></tr></thead>
+      <tbody>
+        <tr><td><b>Human</b></td><td>Alliance</td><td>Will to Survive breaks stuns. +1% crit with any weapon. +10% Spirit for mana regen.</td><td><span class="pill ret">Ret</span> <span class="pill holy">Holy</span> <span class="pill gold">PvP</span></td></tr>
+        <tr><td><b>Dwarf</b></td><td>Alliance</td><td>Stoneform removes bleeds, poisons and diseases and cuts physical damage taken by 10%. +1% hit (added Oct 26). +5% damage to Beasts helps leveling.</td><td><span class="pill prot">Prot</span> <span class="pill ret">Ret</span></td></tr>
+        <tr><td><b>Undead</b></td><td>Horde</td><td>Will of the Forsaken breaks fear, charm and sleep. Touch of the Grave drains health on hit (15 sec internal cooldown). Cannibalize gives fast health regen from corpses, the best leveling racial of the three.</td><td>Every Horde Paladin</td></tr>
+      </tbody>
+    </table></div>
+    <div class="two">
+      <div class="card small"><b>Alliance pick:</b> Human for Ret, Holy and PvP. Dwarf if you mainly want to tank. Train at Lord Grayson Shadowbreaker (Stormwind) or Valgar Highforge (Ironforge).</div>
+      <div class="card small"><b>Horde pick:</b> Undead. <b>Orgrimmar has no Paladin trainer.</b> Train at Garen Largo (Undercity), Alodan the Hopeful (Thunder Bluff), Aramis Hammerhand (Deathknell), Shari Stilwell (Brill) or Hilda the Breaker (Bandarion Keep).</div>
+    </div>
+  </div>
+</section>
+
+<!-- KIT -->
+<section id="kit" class="view">
+  <div class="sec-head">
+    <div class="step">Step 2 · Know your tools</div>
+    <h2>What Forever changed about the Paladin</h2>
+  </div>
+  <div class="subtabs" role="tablist"><button type="button" role="tab" data-p="kit-changes">Changes</button><button type="button" role="tab" data-p="kit-seals">Seals</button><button type="button" role="tab" data-p="kit-auras">Auras &amp; blessings</button></div>
+  <div class="stack">
+    <div class="panel" id="kit-changes" data-title="What changed for the Paladin in Forever">
+    <div class="card">
+      <ul>
+        <li><b>Holy Strike</b> (level 6): a new instant weapon strike for every spec, and the button you press most.</li>
+        <li><b>Seal of Fury</b> (level 10): a tank Seal. It adds Holy damage to swings, gives an absorb shield if you have a shield equipped, and turns Judgement into a <b>10-yard taunt</b>.</li>
+        <li><b>Judgement no longer eats your Seal.</b> Don't recast the same Seal after judging; that only wastes mana and a global cooldown.</li>
+        <li><b>Consecration and Blessing of Kings</b> are baseline at level 20. Consecration now does full damage to the first 4 enemies only.</li>
+        <li><b>Righteous Fury</b> is learned at 10. It adds 33% threat to everything and another 90% to Holy attacks.</li>
+        <li><b>Lay on Hands</b> cooldown dropped from 1 hour to 20 minutes. Blessings now last 1 hour.</li>
+        <li><b>Resistance auras</b> now cover the whole raid within 30 yards. Sanctity Aura is gone.</li>
+        <li><b>Still missing:</b> no interrupt and no way to slow a fleeing enemy. Plan around it, especially in PvP.</li>
+      </ul>
+    </div>
+
+    </div>
+    <div class="panel" id="kit-seals" data-title="Seals: what each one does">
+    <h3>Seals</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Seal</th><th>Lv</th><th>On swing</th><th>When judged</th></tr></thead>
+      <tbody>
+        <tr><td><b>Righteousness</b></td><td class="num">1</td><td>Extra Holy damage per swing</td><td>Holy damage</td></tr>
+        <tr><td><b>Crusader</b></td><td class="num">6</td><td>Faster attacks, more attack power</td><td>Target takes more Holy damage</td></tr>
+        <tr><td><b>Fury</b></td><td class="num">10</td><td>Flat Holy damage, absorb shield (needs a shield)</td><td>Holy damage and 10-yd taunt</td></tr>
+        <tr><td><b>Command</b> <span class="pill ret">talent</span></td><td class="num">20</td><td>Chance of an extra Holy hit (70% weapon damage)</td><td>Bonus damage on stunned or incapacitated targets</td></tr>
+        <tr><td><b>Justice</b></td><td class="num">22</td><td>Chance to stun</td><td>Target can't run at full speed</td></tr>
+        <tr><td><b>Light</b></td><td class="num">30</td><td>Chance to heal you</td><td>Attackers heal on hit</td></tr>
+        <tr><td><b>Wisdom</b></td><td class="num">38</td><td>Chance to restore mana</td><td>Attackers restore mana on hit</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Only one Seal can be active at a time. A DPS Paladin should never judge with Seal of Fury on a mob the tank is holding, because it taunts.</p>
+
+    </div>
+    <div class="panel" id="kit-auras" data-title="Auras and blessings">
+    <h3>Auras and blessings</h3>
+    <div class="two">
+      <div class="card small">
+        <b>Auras (one per Paladin)</b>
+        <ul>
+          <li>Devotion (1): armor</li>
+          <li>Retribution (16): Holy damage to attackers</li>
+          <li>Concentration (22): less spell pushback</li>
+          <li>Shadow / Frost / Fire Resistance (28 / 32 / 36): raid-wide in 30 yd</li>
+        </ul>
+      </div>
+      <div class="card small">
+        <b>Blessings (each player can carry one from each Paladin)</b>
+        <ul>
+          <li>Might (4), Greater at 52</li>
+          <li>Wisdom (14), Greater at 54</li>
+          <li>Kings (20), Greater at 60</li>
+          <li>Short emergency ones: Protection (10), Freedom (18), Sacrifice (46)</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO CHECK -->
+<section id="video" class="view">
+  <div class="sec-head">
+    <div class="step">Your video, fact-checked</div>
+    <h2>What the YouTube guide got right, and what changed since</h2>
+    <p class="muted">The video was recorded during the level 30 beta. Blizzard rebuilt the Paladin talent trees on Oct 30 and Nov 2, so several talents it describes no longer work that way.</p>
+  </div>
+  <div class="stack">
+    <div class="callout small"><b>Still accurate:</b> Holy Strike at 6, Seal of Fury at 10 with a 10-yard taunt, Judgement keeping your Seal, Lay on Hands at 20 min, Consecration capped at 4 full-damage targets, Kings and Consecration baseline at 20, Holy Shock on a 10 sec cooldown, Illumination refunding 50% (down from 100%), Reverence keeping 30% mana regen while casting, and the prediction that Paladin would be the most played class.</div>
+    <div class="tbl"><table>
+      <thead><tr><th>The video says</th><th>Live game now</th></tr></thead>
+      <tbody>
+        <tr><td><b>Twist of Light</b> is the Ret capstone</td><td><span class="pill warn">Replaced</span> by <b>Unsealed Wrath</b>: swings store copies of your Seal (up to 3, for 15 sec), and hitting with a different Seal spends them all, each with its normal proc chance.</td></tr>
+        <tr><td><b>Improved Seal of Fury</b> gives mana when the shield breaks</td><td><span class="pill warn">Removed</span> from the tree.</td></tr>
+        <tr><td><b>Champion of the Light</b> gives spell power up to 100% of Intellect</td><td><span class="pill warn">Changed</span> to 5 ranks, up to 60% of Intellect, and it now cuts Hammer of Wrath's cast time by 1 sec.</td></tr>
+        <tr><td><b>Iron Creed</b> gives about 10% damage reduction</td><td><span class="pill warn">Changed</span> to 3 ranks: 6% less damage taken and 30% more threat.</td></tr>
+        <tr><td><b>Holy Power</b> adds 15% crit to Holy Shock</td><td><span class="pill warn">Changed</span>: it now raises your crit <i>healing</i> bonus (10–50%), not crit chance.</td></tr>
+        <tr><td><b>Light's Vigil</b> may also hit enemies</td><td><span class="pill warn">Changed</span>: it no longer triggers on enemies. It's party healing only.</td></tr>
+        <tr><td><b>Divine Precision</b> as the Shockadin hit talent</td><td><span class="pill warn">Changed</span> to 2 ranks: +8% Holy spell hit (was 18%), and Silence lasts 20% shorter on you.</td></tr>
+        <tr><td><b>Swift Judgement</b> resets Judgement every minute</td><td><span class="pill warn">Changed</span>: it now uses your active Seal's Judgement on its own 1-minute cooldown. Still a second taunt with Seal of Fury.</td></tr>
+        <tr><td><b>Vindication</b> as a stat debuff</td><td><span class="pill warn">Changed</span>: it no longer reduces attack power.</td></tr>
+        <tr><td>Templar's Bulwark, Shield Specialization, Righteous Fury</td><td>Bulwark can now be magic-dispelled. Shield Specialization is 2 ranks (same max value). Righteous Fury is learned at 10, not 16.</td></tr>
+        <tr><td>Not in the video</td><td><span class="pill ok">New</span> <b>Shieldsworn</b> (Prot capstone), <b>Oath of Light</b> and <b>Boundless Light</b> (Holy), <b>Stoicism</b> (Prot) and the <b>Turn Evil</b> ability.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">The video's worry about seal twisting needing two Windfury-procing Seals was about Twist of Light. Unsealed Wrath works differently, so that concern no longer applies the same way. Nobody has tested it on Windfury in a raid yet.</p>
+  </div>
+</section>
+
+<!-- LEVELING -->
+<section id="leveling" class="view">
+  <div class="sec-head">
+    <div class="step">Step 3 · Levels 1–60</div>
+    <h2>Leveling: Retribution all the way</h2>
+  </div>
+  <div class="subtabs" role="tablist"><button type="button" role="tab" data-p="lv-talents">Talent order</button><button type="button" role="tab" data-p="lv-rotation">Rotation</button><button type="button" role="tab" data-p="lv-zones">Zones</button><button type="button" role="tab" data-p="lv-weapons">Weapons</button><button type="button" role="tab" data-p="lv-tracker">Tracker</button><button type="button" role="tab" data-p="lv-spec">Which spec?</button></div>
+  <div class="stack">
+    <div class="panel" id="lv-spec" data-title="Which spec to level as">
+    <div class="tbl"><table>
+      <thead><tr><th>Spec</th><th>Weapon</th><th>Good for</th><th>Downside</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill ret">Retribution</span><br><b>Recommended</b></td><td>Slow two-hander</td><td>Solo questing. Big Seal of Command hits, 15% run speed from Pursuit of Justice, self-healing.</td><td>Single-target only until Consecration at 20</td></tr>
+        <tr><td><span class="pill prot">Protection</span></td><td>One-hander + shield</td><td>Tanking dungeons, pulling 2–3 mobs at once</td><td>Slow on single targets and weak without a group</td></tr>
+        <tr><td><span class="pill holy">Holy / Shockadin</span></td><td>One-hander, spell power</td><td>Duos, healing dungeons</td><td>Needs spell power gear and careful mana</td></tr>
+      </tbody>
+    </table></div>
+
+    </div>
+    <div class="panel" id="lv-talents" data-title="Retribution leveling talent order, level by level">
+    <h3>Retribution talent order, level by level</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Level</th><th>Talent</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td class="num">10–14</td><td>Benediction 5/5</td><td>Cheaper instant spells, your main mana fix</td></tr>
+        <tr><td class="num">15–17</td><td>Conviction 3/3</td><td>Crit</td></tr>
+        <tr><td class="num">18–19</td><td>Improved Judgement 2/2</td><td>Judge more often</td></tr>
+        <tr><td class="num">20</td><td><b>Seal of Command</b></td><td>Your leveling Seal from here on</td></tr>
+        <tr><td class="num">21–22</td><td>Pursuit of Justice 2/2</td><td>Run speed; no mounts until 40</td></tr>
+        <tr><td class="num">23–24</td><td>Sanctified Judgement 2/3</td><td>Mana back from Judgement</td></tr>
+        <tr><td class="num">25</td><td><b>Sacred Arbiter</b></td><td>Stronger Holy Strike that refreshes your Judgements</td></tr>
+        <tr><td class="num">26–28</td><td>Two-Handed Weapon Spec 3/3</td><td>Physical damage</td></tr>
+        <tr><td class="num">29</td><td>Sanctified Judgement 3/3</td><td>Finish it</td></tr>
+        <tr><td class="num">30</td><td><b>Repentance</b></td><td>Incapacitate a humanoid; damage breaks it</td></tr>
+        <tr><td class="num">31–33</td><td>Vengeance 3/3</td><td>Damage after crits</td></tr>
+        <tr><td class="num">34</td><td>Eye for an Eye 1/2</td><td>Filler point</td></tr>
+        <tr><td class="num">35–39</td><td>Champion of the Light 5/5</td><td>Spell power from Intellect</td></tr>
+        <tr><td class="num">40</td><td><b>Unsealed Wrath</b></td><td>Capstone: Seal storage, the new seal twisting</td></tr>
+        <tr><td class="num">41–60</td><td>Holy: Divine Strength, Improved Seals, Holy Conduit, Divine Favor, Reverence. Prot: Divine Intellect.</td><td>Ends on the level 60 Ret build below</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Got the <b>Talented</b> legacy unlock from an earlier character? It gives 5 extra early points, so you reach each row sooner. <b>Thrill of Adventure</b> (legacy) restores mana and health after kills.</p>
+
+    </div>
+    <div class="panel" id="lv-rotation" data-title="Leveling rotation, mana and stats">
+    <h3>Rotation and mana while leveling</h3>
+    <div class="two">
+      <div class="card small">
+        <b>Priority</b>
+        <ol>
+          <li>Seal of Righteousness up (Seal of Command from 20).</li>
+          <li>Judgement on cooldown. It's off the global cooldown.</li>
+          <li>Holy Strike on cooldown.</li>
+          <li>Consecration on 2 or more mobs (from 20).</li>
+          <li>Tough mob: open with Hammer of Justice, then Judge with Seal of Command for bonus damage.</li>
+          <li>Exorcism on Undead and Demons. Hammer of Wrath at 20% health (from 44).</li>
+        </ol>
+      </div>
+      <div class="card small">
+        <b>Mana and survival</b>
+        <ul>
+          <li>Spend mana early in a fight, then auto-attack while Spirit refills you.</li>
+          <li>Blessing of Wisdom when mana is short, Might when it's fine.</li>
+          <li>Don't Consecrate single mobs; it drains you.</li>
+          <li>Losing a fight? Divine Shield, then two Holy Lights.</li>
+          <li><b>Stats:</b> weapon damage first (slow, 3.3 speed or more), then Stamina, then Spirit or Intellect, then Strength and spell power.</li>
+          <li>Don't swap Stamina and Spirit mail for Strength plate just because it's plate.</li>
+        </ul>
+      </div>
+    </div>
+
+    </div>
+    <div class="panel" id="lv-zones" data-title="Leveling zone route and dungeons">
+    <h3>Zone route</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Levels</th><th>Horde (Undead)</th><th>Alliance</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1–10</td><td>Tirisfal Glades</td><td>Elwynn Forest, Dun Morogh</td></tr>
+        <tr><td class="num">10–20</td><td>Silverpine Forest, The Barrens</td><td>Westfall, Loch Modan, Darkshore</td></tr>
+        <tr><td class="num">20–30</td><td>Stonetalon, Ashenvale, Hillsbrad</td><td>Redridge, Duskwood, Wetlands, Ashenvale</td></tr>
+        <tr><td class="num">30–40</td><td>Thousand Needles, Desolace, Arathi, Stranglethorn</td><td>Arathi, Desolace, Stranglethorn</td></tr>
+        <tr><td class="num">35–45</td><td colspan="2"><b>Riverglades</b> (new zone, both factions)</td></tr>
+        <tr><td class="num">40–50</td><td colspan="2">Tanaris, Feralas, The Hinterlands, Badlands</td></tr>
+        <tr><td class="num">50–60</td><td colspan="2">Un'Goro Crater, Felwood, Burning Steppes, Winterspring, Eastern Plaguelands</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Leave a zone once its mobs turn green. Dungeons on the way to 30 worth one clear each: Ragefire Chasm or Deadmines, Ruins of Lordaeron, Wailing Caverns, Shadowfang Keep, Blackfathom Deeps.</p>
+
+    <div class="callout small"><b>XP boosts right now:</b> dungeon kill XP went up 50% on Nov 8, and crafted food gives +5% XP from kills while Well Fed. Level Cooking early and eat while questing.</div>
+
+    </div>
+    <div class="panel" id="lv-weapons" data-title="Weapon upgrades while leveling">
+    <h3>Weapon path</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Level</th><th>Alliance</th><th>Horde</th></tr></thead>
+      <tbody>
+        <tr><td class="num">5</td><td>Northshire Hammer</td><td>Brave's Axe</td></tr>
+        <tr><td class="num">10</td><td colspan="2">Empyrean Greatsword</td></tr>
+        <tr><td class="num">15</td><td>Ironforge Greathammer</td><td>Axe of Orgrimmar</td></tr>
+        <tr><td class="num">16–22</td><td colspan="2">Rhahk'Zor's Hammer (Deadmines): 3.2 speed, Stamina and spell power</td></tr>
+        <tr><td class="num">20–25</td><td>Verigan's Fist (class quest)</td><td>Hammerbone, then Wolfsbane (Undead class quest)</td></tr>
+        <tr><td class="num">30–35</td><td>Corpsemaker, then Defender of Dalaran</td><td>Corpsemaker</td></tr>
+        <tr><td class="num">40</td><td>Ravager (Scarlet Monastery, 3.5 speed)</td><td>Abandoned Ferocity</td></tr>
+        <tr><td class="num">45</td><td colspan="2">Grimlok's Charge</td></tr>
+        <tr><td class="num">55</td><td colspan="2">Beastslayer</td></tr>
+        <tr><td class="num">60</td><td colspan="2">Forest Defender's Axe (Blacksmithing)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Weapon skills are bought from Weapon Masters. Alliance: Woo Ping in Stormwind (swords, polearms) and Buliwyf Stonehand in Ironforge (axes, maces). Horde: Archibald in Undercity (swords, polearms), Sayoc and Hanashi in Orgrimmar (axes), Ansekhwa in Thunder Bluff (maces).</p>
+
+    </div>
+    <div class="panel" id="lv-tracker" data-title="Leveling milestone tracker">
+    <h3>Milestone tracker</h3>
+    <p class="small muted">Tick these off as you go. Your ticks are saved in this browser.</p>
+    <div class="progress"><span id="pct">0 of 0 done</span><div class="bar"><i id="barfill"></i></div></div>
+    <div class="check" id="milestones">
+      <label><input type="checkbox" id="m6"><span class="lv">6</span><span>Train Holy Strike and put it on your main key</span></label>
+      <label><input type="checkbox" id="m10"><span class="lv">10</span><span>Seal of Fury, Righteous Fury, Lay on Hands. First talent: Benediction.</span></label>
+      <label><input type="checkbox" id="m12"><span class="lv">12</span><span>Redemption (resurrection)</span></label>
+      <label><input type="checkbox" id="m16"><span class="lv">16</span><span>Retribution Aura replaces Devotion while questing</span></label>
+      <label><input type="checkbox" id="m18"><span class="lv">18</span><span>Run Deadmines for Rhahk'Zor's Hammer</span></label>
+      <label><input type="checkbox" id="m20"><span class="lv">20</span><span>Consecration, Kings, Exorcism, Seal of Command. Do the class weapon quest.</span></label>
+      <label><input type="checkbox" id="m25"><span class="lv">25</span><span>Sacred Arbiter talent</span></label>
+      <label><input type="checkbox" id="m30"><span class="lv">30</span><span>Seal of Light, Repentance</span></label>
+      <label><input type="checkbox" id="m34"><span class="lv">34</span><span>Divine Shield</span></label>
+      <label><input type="checkbox" id="m40"><span class="lv">40</span><span>Plate, Dual Spec, Unsealed Wrath. Paladins get their first mount free from a quest at 40. Set up a Prot or Holy second spec.</span></label>
+      <label><input type="checkbox" id="m42"><span class="lv">42</span><span>Cleanse replaces Purify. Update your mouseover macro.</span></label>
+      <label><input type="checkbox" id="m44"><span class="lv">44</span><span>Hammer of Wrath for executes</span></label>
+      <label><input type="checkbox" id="m60"><span class="lv">60</span><span>Respec into your raid role and start the pre-raid list</span></label>
+    </div>
+    <p class="small muted">Training 1 to 60 costs roughly 206–236 gold in total, so keep gold aside for each trainer visit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BUILDS -->
+<section id="builds" class="view">
+  <div class="sec-head">
+    <div class="step">Step 4 · Level 60</div>
+    <h2>Level 60 builds for each spec</h2>
+    <p class="muted">Start with Ratings to compare every build. 51 talent points. These are the starting builds from the Nov 2–4 notes. Check each one in an in-game talent calculator, because trees can still shift. Splits are written Holy / Protection / Retribution.</p>
+  </div>
+  <div class="subtabs" role="tablist"><button type="button" role="tab" data-p="b-rate">Ratings</button><button type="button" role="tab" data-p="b-ret">Retribution</button><button type="button" role="tab" data-p="b-prot">Protection</button><button type="button" role="tab" data-p="b-holy">Holy</button><button type="button" role="tab" data-p="b-shock">Shockadin</button><button type="button" role="tab" data-p="b-pvp">PvP splits</button></div>
+  <div class="stack">
+    <div class="panel" id="b-rate" data-title="Paladin build ratings: solo leveling, raid need and PvP">
+    <div class="tbl"><table class="rate">
+      <thead><tr><th>Build</th><th>Solo leveling</th><th>Raid need</th><th>PvP</th></tr></thead>
+      <tbody>
+<tr><td data-l=""><span class="pill ret">Retribution</span><span class="src">Melee DPS</span></td><td data-l="Solo leveling"><b class="grade s">S</b><span class="src">Every guide's leveling pick</span></td><td data-l="Raid need"><b class="grade b">B</b><span class="src">Takes a DPS spot. B-tier raid DPS on LFCarry.</span></td><td data-l="PvP"><b class="grade s">S</b><span class="src">S tier in LFCarry's Nov 2 PvP rating</span></td></tr>
+<tr><td data-l=""><span class="pill prot">Protection</span><span class="src">Tank</span></td><td data-l="Solo leveling"><b class="grade b">B</b><span class="src">Sturdy, but slow on single mobs</span></td><td data-l="Raid need"><b class="grade s">S</b><span class="src">Every raid needs tanks. Led tank damage in a level 60 sim.</span></td><td data-l="PvP"><b class="grade b">B</b><span class="src">Hard to kill, low damage</span></td></tr>
+<tr><td data-l=""><span class="pill holy">Holy</span><span class="src">Healer</span></td><td data-l="Solo leveling"><b class="grade c">C</b><span class="src">Slow solo. Best for healing dungeons.</span></td><td data-l="Raid need"><b class="grade a">A</b><span class="src">Healers are always wanted. One sim had it behind Druid and Priest.</span></td><td data-l="PvP"><b class="grade a">A</b><span class="src">Strong tools for healing through control</span></td></tr>
+<tr><td data-l=""><span class="pill shock">Shockadin</span><span class="src">Holy/Ret hybrid</span></td><td data-l="Solo leveling"><b class="grade b">B</b><span class="src">Fun, but short on mana around 30</span></td><td data-l="Raid need"><b class="grade b">B</b><span class="src">Takes a DPS spot. Sims close to deep Ret.</span></td><td data-l="PvP"><b class="grade a">A</b><span class="src">Instant Holy Shock burst plus off-heals</span></td></tr>
+<tr><td data-l=""><span class="pill shock">Holy/Prot tank</span><span class="src">Experimental tank</span></td><td data-l="Solo leveling"><b class="grade c">C</b><span class="src">No leveling data</span></td><td data-l="Raid need"><b class="grade c">C</b><span class="src">Only tested single-target in a sim</span></td><td data-l="PvP"><b class="grade c">C</b><span class="src">Not built for it</span></td></tr>
+<tr><td data-l=""><span class="pill shock">Holy/Prot PvP</span><span class="src">Anti-control healer</span></td><td data-l="Solo leveling"><b class="grade c">C</b><span class="src">Low damage</span></td><td data-l="Raid need"><b class="grade c">C</b><span class="src">Made for PvP</span></td><td data-l="PvP"><b class="grade a">A</b><span class="src">Built to keep casting through stuns and silences</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="ratings"><span><b class="grade s">S</b> best / every raid needs it</span><span><b class="grade a">A</b> strong / always wanted</span><span><b class="grade b">B</b> fine / competes for a DPS spot</span><span><b class="grade c">C</b> weak or rarely taken</span></div>
+    <p class="small muted">These are my ratings, combining the LFCarry and RankedBoost tier lists, damage sims and the guides in Sources. "Raid need" means how badly a raid wants that build, not only its damage. Nobody has raided yet, so expect changes after Dec 9.</p>
+    </div>
+    <div class="panel" id="b-ret" data-title="Retribution level 60 build (Unsealed Wrath)">
+    <div class="card spec-ret">
+      <div><span class="pill ret">Retribution · Melee DPS</span></div>
+      <div class="ratings"><span><b class="grade s">S</b> Solo leveling</span><span><b class="grade b">B</b> Raid need</span><span><b class="grade s">S</b> PvP</span></div>
+      <h3>Unsealed Wrath Retribution <span class="split">15 / 5 / 31</span></h3>
+      <div class="talents">
+        <div class="tree"><h4><span>Retribution</span><span>31</span></h4><ul>
+          <li><span>Benediction</span><span>5/5</span></li><li><span>Conviction</span><span>3/3</span></li><li><span>Improved Judgement</span><span>2/2</span></li><li><span>Seal of Command</span><span>1/1</span></li><li><span>Pursuit of Justice</span><span>2/2</span></li><li><span>Sanctified Judgement</span><span>3/3</span></li><li><span>Sacred Arbiter</span><span>1/1</span></li><li><span>Two-Handed Weapon Spec</span><span>3/3</span></li><li><span>Repentance</span><span>1/1</span></li><li><span>Vengeance</span><span>3/3</span></li><li><span>Eye for an Eye</span><span>1/2</span></li><li><span>Champion of the Light</span><span>5/5</span></li><li><span>Unsealed Wrath</span><span>1/1</span></li>
+        </ul></div>
+        <div class="tree"><h4><span>Holy</span><span>15</span></h4><ul>
+          <li><span>Improved Seals</span><span>5/5</span></li><li><span>Divine Strength</span><span>5/5</span></li><li><span>Holy Conduit</span><span>2/2</span></li><li><span>Reverence</span><span>2/2</span></li><li><span>Divine Favor</span><span>1/1</span></li>
+        </ul></div>
+        <div class="tree"><h4><span>Protection</span><span>5</span></h4><ul>
+          <li><span>Divine Intellect</span><span>5/5</span></li>
+        </ul></div>
+      </div>
+      <p><b>How to play it:</b> keep Seal of Command up, Judge on cooldown and press Holy Strike whenever you are in range. Sacred Arbiter means Holy Strike keeps every Judgement on the boss refreshed for the raid. To use Unsealed Wrath, swing a few times with Command, then switch to Righteousness so the next hit spends the stored copies. The Seal twist macro below does this on one key. Use Hammer of Wrath under 20% and Exorcism on Undead and Demons.</p>
+      <p><b>Stats:</b> weapon damage and Strength first, then hit and crit, then Intellect, which Champion of the Light turns into spell power.</p>
+      <div class="callout warn small"><b>Where Ret stands:</b> a B-tier raid DPS on LFCarry's list (it dropped after the Oct 15 patch), but S-tier in PvP. Want Holy Shock instead of Unsealed Wrath? See the <b>Shockadin</b> tab.</div>
+    </div>
+
+    </div>
+    <div class="panel" id="b-prot" data-title="Protection level 60 tank build (Shieldsworn)">
+    <div class="card spec-prot">
+      <div><span class="pill prot">Protection · Tank</span></div>
+      <div class="ratings"><span><b class="grade b">B</b> Solo leveling</span><span><b class="grade s">S</b> Raid need</span><span><b class="grade b">B</b> PvP</span></div>
+      <h3>Shieldsworn Protection <span class="split">13 / 31 / 7</span></h3>
+      <div class="talents">
+        <div class="tree"><h4><span>Protection</span><span>31</span></h4><ul>
+          <li><span>Redoubt</span><span>5/5</span></li><li><span>Reckoning</span><span>5/5</span></li><li><span>Holy Shield</span><span>1/1</span></li><li><span>Iron Creed</span><span>3/3</span></li><li><span>Improved Righteous Fury</span><span>3/3</span></li><li><span>Precision</span><span>3/3</span></li><li><span>Shield Specialization</span><span>2/2</span></li><li><span>Sacred Duty</span><span>2/2</span></li><li><span>Toughness</span><span>3/5</span></li><li><span>Anticipation</span><span>1/5</span></li><li><span>Templar's Bulwark</span><span>1/1</span></li><li><span>Swift Judgement</span><span>1/1</span></li><li><span>Shieldsworn</span><span>1/1</span></li>
+        </ul></div>
+        <div class="tree"><h4><span>Holy</span><span>13</span></h4><ul>
+          <li><span>Improved Seals</span><span>5/5</span></li><li><span>Divine Strength</span><span>5/5</span></li><li><span>Holy Conduit</span><span>2/2</span></li><li><span>Divine Favor</span><span>1/1</span></li>
+        </ul></div>
+        <div class="tree"><h4><span>Retribution</span><span>7</span></h4><ul>
+          <li><span>Deflection</span><span>5/5</span></li><li><span>Improved Judgement</span><span>2/2</span></li>
+        </ul></div>
+      </div>
+      <p><b>Priority:</b> Righteous Fury on, Seal of Fury on, Holy Shield up, Holy Strike on cooldown (Iron Creed makes it a threat and damage-reduction button), Consecration for packs, Judgement to taunt, and Swift Judgement as the backup taunt. Shieldsworn cuts Holy Strike's cooldown by 4 sec, makes it strike with your shield (triggering Holy Shield and Shield Specialization without spending charges) and lets you block spells for 6 sec.</p>
+      <p><b>Cooldowns:</b> Templar's Bulwark is a huge absorb shield on a long cooldown. Check Forbearance before Bulwark or immunities; Sacred Duty shortens it by 10 sec. Bulwark can be dispelled, so watch enemy casters.</p>
+      <p><b>Stats:</b> Stamina first, then Strength and Agility, with Intellect for mana. Shield Specialization returns mana when you block.</p>
+      <div class="callout blue small"><b>Where Prot stands:</b> it led tank damage in a level 60 sim, and several guides call it a top tank. Its limits: full Consecration threat on only 4 targets, and no interrupt, so bring a kicker for caster packs.</div>
+    </div>
+
+    </div>
+    <div class="panel" id="b-holy" data-title="Holy level 60 healer build (Light's Vigil)">
+    <div class="card spec-holy">
+      <div><span class="pill holy">Holy · Healer</span></div>
+      <div class="ratings"><span><b class="grade c">C</b> Solo leveling</span><span><b class="grade a">A</b> Raid need</span><span><b class="grade a">A</b> PvP</span></div>
+      <h3>Light's Vigil Holy <span class="split">31 / 11 / 9</span></h3>
+      <div class="talents">
+        <div class="tree"><h4><span>Holy</span><span>31</span></h4><ul>
+          <li><span>Holy Power</span><span>5/5</span></li><li><span>Illumination</span><span>5/5</span></li><li><span>Spiritual Focus</span><span>5/5</span></li><li><span>Healing Light</span><span>3/3</span></li><li><span>Holy Conduit</span><span>2/2</span></li><li><span>Reverence</span><span>2/2</span></li><li><span>Infusion of Light</span><span>2/2</span></li><li><span>Boundless Light</span><span>2/2</span></li><li><span>Holy Shock</span><span>1/1</span></li><li><span>Oath of Light</span><span>1/1</span></li><li><span>Divine Favor</span><span>1/1</span></li><li><span>Purifying Power</span><span>1/2</span></li><li><span>Light's Vigil</span><span>1/1</span></li>
+        </ul></div>
+        <div class="tree"><h4><span>Protection</span><span>11</span></h4><ul>
+          <li><span>Divine Intellect</span><span>5/5</span></li><li><span>Guardian's Favor</span><span>2/2</span></li><li><span>Precision</span><span>3/3</span></li><li><span>Templar's Bulwark</span><span>1/1</span></li>
+        </ul></div>
+        <div class="tree"><h4><span>Retribution</span><span>9</span></h4><ul>
+          <li><span>Benediction</span><span>5/5</span></li><li><span>Conviction</span><span>3/3</span></li><li><span>Improved Judgement</span><span>1/2</span></li>
+        </ul></div>
+      </div>
+      <p><b>How to heal:</b> keep <b>Oath of Light</b> on the main tank (one ally, 5 min, boosts your heals on them). Flash of Light does most of your healing because it's the most mana-efficient. Use Holy Light for big hits, Holy Shock for instant emergencies and Divine Favor for a guaranteed crit when it matters. For group damage, cast <b>Light's Vigil</b> on someone, then Holy Shock them to heal their whole party.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Spell</th><th>Healing per mana</th><th>Healing per cast-second</th></tr></thead>
+        <tbody>
+          <tr><td>Flash of Light</td><td class="num">5.75</td><td class="num">498</td></tr>
+          <tr><td>Light's Vigil</td><td class="num">4.44</td><td class="num">2,898</td></tr>
+          <tr><td>Holy Light</td><td class="num">4.15</td><td class="num">1,018</td></tr>
+          <tr><td>Holy Shock</td><td class="num">2.79</td><td class="num">501</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Numbers from Icy Veins (Nov 3). Light's Vigil heals a lot per cast but costs so much that you'll drink often if you spam it in dungeons.</p>
+      <div class="callout warn small"><b>Where Holy stands:</b> great single-target healing and the easiest healer to learn, but one healer sim put it at about half the throughput of Resto Druid and Priest. Raids still want Paladins for blessings and auras.</div>
+    </div>
+
+    </div>
+    <div class="panel" id="b-shock" data-title="Shockadin builds: Holy/Ret and Holy/Prot compared">
+    <div class="tbl"><table class="rate cmp">
+      <thead><tr><th>Shockadin type</th><th>Split</th><th>What it does</th><th>Leveling</th><th>Raid need</th><th>PvP</th></tr></thead>
+      <tbody><tr><td data-l=""><b>Holy/Ret raid</b></td><td data-l="Split" class="num">23 / 0 / 28</td><td data-l="What it does">Melee + Holy Shock damage</td><td data-l="Leveling"><b class="grade b">B</b></td><td data-l="Raid need"><b class="grade b">B</b></td><td data-l="PvP"><b class="grade a">A</b></td></tr><tr><td data-l=""><b>Holy/Ret PvP</b></td><td data-l="Split" class="num">27 / 0 / 24</td><td data-l="What it does">Burst and off-heals</td><td data-l="Leveling"><b class="grade b">B</b></td><td data-l="Raid need"><b class="grade c">C</b></td><td data-l="PvP"><b class="grade a">A</b></td></tr><tr><td data-l=""><b>Holy/Prot tank</b></td><td data-l="Split" class="num">27 / 24 / 0</td><td data-l="What it does">Tank that casts Holy Shock</td><td data-l="Leveling"><b class="grade c">C</b></td><td data-l="Raid need"><b class="grade c">C</b></td><td data-l="PvP"><b class="grade c">C</b></td></tr><tr><td data-l=""><b>Holy/Prot PvP</b></td><td data-l="Split" class="num">24 / 27 / 0</td><td data-l="What it does">Healer that ignores control</td><td data-l="Leveling"><b class="grade c">C</b></td><td data-l="Raid need"><b class="grade c">C</b></td><td data-l="PvP"><b class="grade a">A</b></td></tr></tbody>
+    </table></div>
+    <p class="small muted">Splits are Holy / Protection / Retribution. <b>Short version:</b> raid Shockadin for PvE damage, PvP Shockadin for duels and battlegrounds, Holy/Prot PvP if you want to heal in PvP. The Holy/Prot tank is a fun experiment, but a raid should get a deep Protection tank.</p>
+    <div class="card spec-shock">
+      <div><span class="pill shock">Holy/Ret · Raid DPS</span> <span class="pill ok">Best raid Shockadin</span></div>
+      <div class="ratings"><span><b class="grade b">B</b> Solo leveling</span><span><b class="grade b">B</b> Raid need</span><span><b class="grade a">A</b> PvP</span></div>
+      <h3>Raid Shockadin <span class="split">23 / 0 / 28</span></h3>
+      <div class="talents">
+        <div class="tree"><h4><span>Holy</span><span>23</span></h4><ul><li><span>Divine Strength</span><span>5/5</span></li><li><span>Improved Seals</span><span>5/5</span></li><li><span>Reverence</span><span>2/2</span></li><li><span>Purifying Power</span><span>2/2</span></li><li><span>Divine Favor</span><span>1/1</span></li><li><span>Holy Conduit</span><span>2/2</span></li><li><span>Divine Precision</span><span>2/2</span></li><li><span>Infusion of Light</span><span>1/2</span></li><li><span>Consecrated Ground</span><span>2/2</span></li><li><span>Holy Shock</span><span>1/1</span></li></ul></div>
+        <div class="tree"><h4><span>Retribution</span><span>28</span></h4><ul><li><span>Benediction</span><span>5/5</span></li><li><span>Improved Judgement</span><span>2/2</span></li><li><span>Conviction</span><span>3/3</span></li><li><span>Sanctified Judgement</span><span>3/3</span></li><li><span>Vindication</span><span>3/3</span></li><li><span>Seal of Command</span><span>1/1</span></li><li><span>Pursuit of Justice</span><span>1/1</span></li><li><span>Sacred Arbiter</span><span>1/1</span></li><li><span>Two-Handed Weapon Spec</span><span>3/3</span></li><li><span>Vengeance</span><span>3/3</span></li><li><span>Champion of the Light</span><span>3/5</span></li></ul></div>
+      </div>
+      <p><b>Why this one:</b> two sites list this exact build, and one tuned it with a damage simulator (1,063 DPS on Nov 3). Icy Veins says deep Ret and Shockadin come out close at 60.</p>
+      <p><b>How to play it:</b> swing a two-hander with <b>Seal of Righteousness</b>, Judge every time it's ready, and fill the gaps with Consecration, Holy Strike and Holy Shock. Holy Shock fires every 10 sec for about 11% of your damage. Consecrated Ground adds 10% Holy damage to the first 4 enemies in your Consecration.</p>
+      <p><b>Why no Unsealed Wrath:</b> Holy Shock needs 21 Holy points and Unsealed Wrath needs 31 in Retribution. That's 52, one more than you have. Seal of Command is only taken to unlock Vengeance.</p>
+      <p><b>Stats:</b> Expertise, then spell damage, then Holy damage. Among the % stats: crit, then hit, then attack speed. Intellect also helps through Champion of the Light.</p>
+    </div>
+    <div class="card spec-shock">
+      <div><span class="pill shock">Holy/Ret · PvP</span></div>
+      <div class="ratings"><span><b class="grade b">B</b> Solo leveling</span><span><b class="grade c">C</b> Raid need</span><span><b class="grade a">A</b> PvP</span></div>
+      <h3>PvP Shockadin <span class="split">27 / 0 / 24</span></h3>
+      <div class="talents">
+        <div class="tree"><h4><span>Holy</span><span>27</span></h4><ul><li><span>Healing Light</span><span>3/3</span></li><li><span>Spiritual Focus</span><span>5/5</span></li><li><span>Reverence</span><span>2/2</span></li><li><span>Purifying Power</span><span>2/2</span></li><li><span>Illumination</span><span>5/5</span></li><li><span>Divine Favor</span><span>1/1</span></li><li><span>Divine Precision</span><span>2/2</span></li><li><span>Holy Shock</span><span>1/1</span></li><li><span>Consecrated Ground</span><span>2/2</span></li><li><span>Holy Conduit</span><span>2/2</span></li><li><span>Boundless Light</span><span>2/2</span></li></ul></div>
+        <div class="tree"><h4><span>Retribution</span><span>24</span></h4><ul><li><span>Benediction</span><span>5/5</span></li><li><span>Improved Judgement</span><span>2/2</span></li><li><span>Conviction</span><span>3/3</span></li><li><span>Vindication</span><span>3/3</span></li><li><span>Seal of Command</span><span>1/1</span></li><li><span>Pursuit of Justice</span><span>2/2</span></li><li><span>Eye for an Eye</span><span>2/2</span></li><li><span>Sacred Arbiter</span><span>1/1</span></li><li><span>Vengeance</span><span>3/3</span></li><li><span>Unyielding Faith</span><span>2/2</span></li></ul></div>
+      </div>
+      <p><b>How to play it:</b> keep Seal of Command up. Open with Judgement and use Holy Strike to keep it refreshed. Holy Shock is your instant burst or finisher. Chain damage while Vengeance stacks are up (each crit adds one). Save Divine Favor for a Holy Shock that must crit. When low: Hammer of Justice, then Flash of Light or Holy Shock yourself. Divine Shield if you're focused.</p>
+      <p><b>Stats:</b> Stamina, then crit, Intellect, spell damage, Strength. Best races: Undead or Dwarf for PvP racials, Human for crit. The source says this build isn't meant for raids.</p>
+    </div>
+    <div class="card spec-shock">
+      <div><span class="pill shock">Holy/Prot · Tank</span> <span class="pill warn">Experimental</span></div>
+      <div class="ratings"><span><b class="grade c">C</b> Solo leveling</span><span><b class="grade c">C</b> Raid need</span><span><b class="grade c">C</b> PvP</span></div>
+      <h3>Holy/Prot tank <span class="split">27 / 24 / 0</span></h3>
+      <div class="talents">
+        <div class="tree"><h4><span>Holy</span><span>27</span></h4><ul><li><span>Divine Strength</span><span>5/5</span></li><li><span>Improved Seals</span><span>5/5</span></li><li><span>Illumination</span><span>5/5</span></li><li><span>Reverence</span><span>2/2</span></li><li><span>Holy Shock</span><span>1/1</span></li></ul></div>
+        <div class="tree"><h4><span>Protection</span><span>24</span></h4><ul><li><span>Divine Intellect</span><span>5/5</span></li><li><span>Redoubt</span><span>5/5</span></li><li><span>Precision</span><span>3/3</span></li><li><span>Improved Righteous Fury</span><span>3/3</span></li><li><span>Holy Shield</span><span>1/1</span></li></ul></div>
+      </div>
+      <p class="small muted">Kami Labs only lists the maxed talents in readable form, plus the spells the rotation uses (Holy Shock, Holy Shield). Fill the rest in the in-game calculator.</p>
+      <p><b>How to play it:</b> Righteous Fury 5 sec before the pull, Seal of Righteousness 3 sec before. Then, top to bottom: cooldowns (Divine Favor, Swift Judgement, Templar's Bulwark), refresh Seal of Righteousness when it has 1.5 sec or less left, Holy Strike, Consecration (if you have 20% mana or more), Holy Shock, Holy Shield, Judgement, Hammer of Wrath.</p>
+      <p><b>Sim result:</b> 1,566 threat per second and 681 DPS on one target (MythicSim, Nov 9, Undead, dungeon and crafted gear). It only measured single-target threat, not damage taken or packs, so deep Protection is still the safe raid tank.</p>
+    </div>
+    <div class="card spec-shock">
+      <div><span class="pill shock">Holy/Prot · PvP healer</span></div>
+      <div class="ratings"><span><b class="grade c">C</b> Solo leveling</span><span><b class="grade c">C</b> Raid need</span><span><b class="grade a">A</b> PvP</span></div>
+      <h3>Holy/Prot PvP healer <span class="split">24 / 27 / 0</span></h3>
+      <div class="talents">
+        <div class="tree"><h4><span>Holy</span><span>24</span></h4><ul><li><span>Spiritual Focus</span><span>5/5</span></li><li><span>Healing Light</span><span>3/3</span></li><li><span>Divine Precision</span><span>2/2</span></li><li><span>Reverence</span><span>2/2</span></li><li><span>Purifying Power</span><span>2/2</span></li><li><span>Illumination</span><span>5/5</span></li><li><span>Infusion of Light</span><span>2/2</span></li><li><span>Holy Shock</span><span>1/1</span></li></ul></div>
+        <div class="tree"><h4><span>Protection</span><span>27</span></h4><ul><li><span>Divine Intellect</span><span>5/5</span></li><li><span>Redoubt</span><span>2/5</span></li><li><span>Toughness</span><span>5/5</span></li><li><span>Anticipation</span><span>5/5</span></li><li><span>Stoicism</span><span>2/2</span></li><li><span>Sacred Duty</span><span>2/2</span></li><li><span>Guardian's Favor</span><span>2/2</span></li><li><span>Improved Hammer of Justice</span><span>3/3</span></li></ul></div>
+      </div>
+      <p class="small muted">RankedBoost names 48 of the 51 points. Place the last 3 yourself in the in-game calculator.</p>
+      <p><b>How it plays:</b> a healer who can't finish a cast can't heal, so this build is about casting through control. Stoicism shortens stuns and charms, Divine Precision shortens silences, Sacred Duty brings Divine Shield and Templar's Bulwark back sooner, Guardian's Favor speeds up Blessing of Protection and lengthens Freedom, and Improved Hammer of Justice gives you more stuns.</p>
+    </div>
+    <div class="card small">
+      <b>Leveling into a Shockadin</b>
+      <ul>
+        <li><b>Easiest:</b> level as Retribution (Leveling tab), then switch to Shockadin at 60. Dual Spec opens at 40.</li>
+        <li><b>Want Holy Shock while leveling?</b> Alternate Ret and Holy points and take Holy Shock late: about 10/0/11 at 30, 23/0/28 at 60.</li>
+        <li><b>Mana warning:</b> one guide found Shockadin strong at 20 in the beta but short on mana by 30.</li>
+        <li>Another creator levels a 31 Holy / 20 Ret healer hybrid (Ret first until about 23) and respecs at 60.</li>
+      </ul>
+    </div>
+    </div>
+    <div class="panel" id="b-pvp" data-title="PvP and alternate talent splits">
+    <h3>PvP and alternate splits</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Goal</th><th>Holy / Prot / Ret</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill ret">Ret PvP</span></td><td class="num">0 / 12 / 39</td><td>MMOnster's PvP split (beta build)</td></tr>
+        <tr><td><span class="pill holy">Holy PvP</span></td><td class="num">31 / 20 / 0</td><td>Defensive healer</td></tr>
+        <tr><td><span class="pill prot">Prot PvP</span></td><td class="num">13 / 38 / 0</td><td>Niche: hard to kill, low damage</td></tr>
+        <tr><td><span class="pill ret">Ret dungeons</span></td><td class="num">12 / 8 / 31</td><td>Close to the main Ret build</td></tr>
+      </tbody>
+    </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- MACROS -->
+<section id="macros" class="view">
+  <div class="sec-head">
+    <div class="step">Step 5 · Bind these</div>
+    <h2>Macros, ready to paste</h2>
+    <p class="muted">Open the macro window with <code>/macro</code>, make a new macro, paste, and drag it to your bar. Macros hold 255 characters. "Ctrl" means hold Ctrl while you press the key.</p>
+  </div>
+  <div class="subtabs" role="tablist"><button type="button" role="tab" data-p="m-all">Every spec</button><button type="button" role="tab" data-p="m-ret">Retribution</button><button type="button" role="tab" data-p="m-prot">Protection</button><button type="button" role="tab" data-p="m-holy">Holy</button><button type="button" role="tab" data-p="m-shock">Shockadin</button></div>
+  <div class="stack">
+    <div class="panel" id="m-all" data-title="Macros for every spec">
+    <h3>Every spec</h3>
+    <div class="macro"><div class="mh"><div><b>Holy Strike that judges and keeps swinging</b><p>Grabs the nearest enemy, starts auto-attack, judges if ready, then Holy Strike. Your main leveling key.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Holy Strike
+/targetenemy [noharm][dead]
+/startattack
+/cast [harm,nodead] Judgement
+/cast Holy Strike</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Divine Shield, Ctrl to cancel</b><p>Press for the bubble. Hold Ctrl to drop Divine Shield, Divine Protection or Blessing of Protection once you're safe.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Divine Shield
+/cancelaura [mod:ctrl] Divine Shield
+/cancelaura [mod:ctrl] Divine Protection
+/cancelaura [mod:ctrl] Blessing of Protection
+/cast [nomod:ctrl] Divine Shield</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Hammer of Justice on focus, Ctrl for target</b><p>Stuns your focus (a healer, say) without switching targets. Hold Ctrl to stun your current target.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Hammer of Justice
+/cast [mod:ctrl,@target,harm,nodead][nomod:ctrl,@focus,harm,nodead][nomod:ctrl,@target,harm,nodead] Hammer of Justice</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Mouseover Cleanse</b><p>Cleanses whoever is under your mouse, then your target, then you. Before level 42, change Cleanse to Purify.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Cleanse
+/cast [@mouseover,help,nodead][help,nodead][@player] Cleanse</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Seal of the Crusader, judged and swapped back</b><p>Press for Crusader. Hold Ctrl to judge it and swap back to Righteousness in one press. Good for low-level openers.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip [mod:ctrl] Judgement; Seal of the Crusader
+/cast [mod:ctrl,@target,harm,nodead] Judgement
+/cast [mod:ctrl] Seal of Righteousness; Seal of the Crusader</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Blessing of Protection on focus</b><p>Set your healer or a squishy friend as focus, then save them from a melee hit without targeting them.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Blessing of Protection
+/cast [@focus] Blessing of Protection</pre></div>
+
+    </div>
+    <div class="panel" id="m-ret" data-title="Retribution macros">
+    <h3><span class="pill ret">Retribution</span></h3>
+    <div class="macro"><div class="mh"><div><b>Seal twist for Unsealed Wrath</b><p>Starts attacking, judges if ready, then applies Seal of Command. Hold Ctrl to switch to Righteousness and spend your stored Seal copies.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip [mod:ctrl] Seal of Righteousness; Seal of Command
+/startattack [@target,harm,nodead]
+/cast [@target,harm,nodead] Judgement
+/cast [mod:ctrl] Seal of Righteousness; Seal of Command</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Hammer of Wrath execute</b><p>Judges first if ready, then Hammer of Wrath. Only works on targets at 20% health or less (level 44+).</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Hammer of Wrath
+/cast [@target,harm,nodead] Judgement
+/cast [@target,harm,nodead] Hammer of Wrath</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Stun, then Command Judgement on Ctrl</b><p>Hammer of Justice normally. Hold Ctrl to judge: with Seal of Command it hits a stunned target much harder.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip [mod:ctrl] Judgement; Hammer of Justice
+/cast [mod:ctrl,@target,harm,nodead] Judgement; [@target,harm,nodead] Hammer of Justice</pre></div>
+
+    </div>
+    <div class="panel" id="m-prot" data-title="Protection macros">
+    <h3><span class="pill prot">Protection</span></h3>
+    <div class="macro"><div class="mh"><div><b>Mouseover taunt, Swift Judgement on Ctrl</b><p>Taunts the mob under your mouse (or your target) with Seal of Fury up, without changing target. Ctrl uses Swift Judgement when Judgement is on cooldown.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Judgement
+/cast [mod:ctrl] Swift Judgement
+/cast [@mouseover,harm,nodead][harm,nodead] Judgement</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Holy Shield that also judges</b><p>Holy Shield and a Judgement on your target in one press, keeping both in step.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Holy Shield
+/cast [@target,harm,nodead] Judgement
+/cast Holy Shield</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Templar's Bulwark, Ctrl for Lay on Hands on yourself</b><p>Your two "don't die" buttons on one key. Lay on Hands drains the rest of your mana, so it's a last resort.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip [mod:ctrl] Lay on Hands; Templar's Bulwark
+/cast [mod:ctrl,@player] Lay on Hands; Templar's Bulwark</pre></div>
+
+    </div>
+    <div class="panel" id="m-holy" data-title="Holy macros">
+    <h3><span class="pill holy">Holy</span></h3>
+    <div class="macro"><div class="mh"><div><b>Holy Shock anywhere, Divine Favor on Ctrl</b><p>Heals your mouseover, or damages an enemy mouseover, then falls back to target, then you. Ctrl casts Divine Favor first for a sure crit.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Holy Shock
+/cast [mod:ctrl] Divine Favor
+/cast [@mouseover,help,nodead][@mouseover,harm,nodead][@target,help,nodead][@target,harm,nodead][@player] Holy Shock</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Mouseover Holy Light, Voice of Truth on Ctrl</b><p>Mouseover heal. Ctrl adds Voice of Truth (6 sec immunity to silence and interrupts) if you have that talent; remove the second line if you don't.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Holy Light
+/cast [mod:ctrl] Voice of Truth
+/cast [@mouseover,help,nodead][@target,help,nodead][@player] Holy Light</pre></div>
+
+    <div class="macro"><div class="mh"><div><b>Emergency Lay on Hands, Ctrl for Hammer of Justice</b><p>Stops your current cast and instantly Lay on Hands your mouseover, target or you. Ctrl stuns instead.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip [mod:ctrl] Hammer of Justice; Lay on Hands
+/stopcasting
+/cast [mod:ctrl,@mouseover,harm,nodead][mod:ctrl,@target] Hammer of Justice; [@mouseover,help,nodead][@target,help,nodead][@player] Lay on Hands</pre></div>
+
+    </div>
+    <div class="panel" id="m-shock" data-title="Shockadin macros">
+    <h3><span class="pill shock">Shockadin</span></h3>
+    <div class="macro"><div class="mh"><div><b>Holy Shock attack, Alt to heal yourself</b><p>Hits your mouseover enemy or your target. Hold Alt to Holy Shock yourself instead.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Holy Shock
+/cast [mod:alt,@player][@mouseover,harm,nodead][@target,harm,nodead] Holy Shock</pre></div>
+    <div class="macro"><div class="mh"><div><b>Guaranteed-crit Holy Shock (Ctrl)</b><p>Hold Ctrl to cast Divine Favor first, so the next Holy Shock is a sure crit. If Divine Favor uses the global cooldown, press once more to fire the Shock.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Holy Shock
+/cast [mod:ctrl] Divine Favor
+/cast [@target,harm,nodead][@player] Holy Shock</pre></div>
+    <div class="macro"><div class="mh"><div><b>Stun, then Holy Shock on Ctrl</b><p>Hammer of Justice normally. Hold Ctrl to Holy Shock the stunned target.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip [mod:ctrl] Holy Shock; Hammer of Justice
+/cast [mod:ctrl,@target,harm,nodead] Holy Shock; [@target,harm,nodead] Hammer of Justice</pre></div>
+    <div class="macro"><div class="mh"><div><b>Mouseover Flash of Light</b><p>Quick off-heal on whoever is under your mouse, then your friendly target, then you.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip Flash of Light
+/cast [@mouseover,help,nodead][@target,help,nodead][@player] Flash of Light</pre></div>
+    <p class="small muted">The Holy Strike, Divine Shield and Hammer of Justice macros in "Every spec" work for Shockadin too.</p>
+    </div>
+    <p class="small muted">Macros are adapted from RankedBoost, WoWCarry and Mobalytics. Line breaks are added so they paste correctly.</p>
+  </div>
+</section>
+
+<!-- GEAR -->
+<section id="gear" class="view">
+  <div class="sec-head">
+    <div class="step">Step 6 · Gearing up</div>
+    <h2>Pre-raid gear, enchants and professions</h2>
+    <p class="muted">Classic BiS lists don't work here. One check found that 348 of 603 classic pre-raid items no longer exist in Forever. These lists use Forever items only, and the new level 60 dungeons will add more.</p>
+  </div>
+  <div class="subtabs" role="tablist"><button type="button" role="tab" data-p="g-ret">Retribution</button><button type="button" role="tab" data-p="g-prot">Protection</button><button type="button" role="tab" data-p="g-holy">Holy</button><button type="button" role="tab" data-p="g-shock">Shockadin</button><button type="button" role="tab" data-p="g-ench">Enchants &amp; professions</button></div>
+  <div class="stack">
+    <div class="panel" id="g-ret" data-title="Retribution pre-raid gear list">
+    <h3><span class="pill ret">Retribution</span> pre-raid list</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Slot</th><th>Item</th><th>Where from</th></tr></thead>
+      <tbody>
+        <tr><td>Head</td><td>Lionheart Helm</td><td>Blacksmithing</td></tr>
+        <tr><td>Neck</td><td>Beads of Ogre Might</td><td>Quest: Falrin's Vendetta (Dire Maul)</td></tr>
+        <tr><td>Shoulder</td><td>Blessed Plate Pauldrons</td><td>Blacksmithing</td></tr>
+        <tr><td>Back</td><td>Tattered Kirin Tor Cloak</td><td>Seeking Remnant (Alterac Mountains)</td></tr>
+        <tr><td>Chest / Wrist / Waist / Feet</td><td>Blessed Plate set pieces</td><td>Blacksmithing</td></tr>
+        <tr><td>Hands</td><td>Devilsaur Gauntlets</td><td>Leatherworking</td></tr>
+        <tr><td>Legs</td><td>Titanic Leggings</td><td>Blacksmithing</td></tr>
+        <tr><td>Rings</td><td>Ring of Living Stone, Philanthropist's Ring (Horde: White Bone Band)</td><td>Quests: Moonglade, Dire Maul library, Orgrimmar</td></tr>
+        <tr><td>Trinket</td><td>Frozen Heart of the Mountain (Horde also: Rune of the Guard Captain)</td><td>Enchanting / Hinterlands quest</td></tr>
+        <tr><td>Two-hand</td><td>Forest Defender's Axe</td><td>Blacksmithing</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Timesaver list, checked Nov 6. FrostyBoost's older list (Oct 31) prefers reputation pieces instead: Rebels' Rugged Reaper (Theramore Expeditionary Force or Darkspear Raiders, Revered), Theramore Spaulders and Gauntlets, Warden's Signet of Ferocity (The Watchers, Exalted) and Champion's Legplates.</p>
+
+    </div>
+    <div class="panel" id="g-prot" data-title="Protection pre-raid gear list">
+    <h3><span class="pill prot">Protection</span> pre-raid list</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Slot</th><th>Item</th><th>Where from</th></tr></thead>
+      <tbody>
+        <tr><td>Head / Chest / Legs</td><td>Enriched Thorium Helm, Breastplate, Leggings</td><td>Blacksmithing</td></tr>
+        <tr><td>Neck</td><td>Medallion of Grand Marshal Morris</td><td>World drop (BoE)</td></tr>
+        <tr><td>Shoulder</td><td>Spaulders of Valor</td><td>Warchief Rend Blackhand (Blackrock Spire)</td></tr>
+        <tr><td>Back</td><td>Stalwart Cloak</td><td>Vendor</td></tr>
+        <tr><td>Wrist</td><td>Bracers of Valor</td><td>Blackrock Spire</td></tr>
+        <tr><td>Hands / Waist</td><td>Warder's Gloves, Warder's Waistguard</td><td>Blacksmithing</td></tr>
+        <tr><td>Feet</td><td>Boots of Avoidance</td><td>World drop</td></tr>
+        <tr><td>Rings</td><td>Warden's Signet of Vigilance, Ring of Awareness</td><td>The Watchers (Exalted), vendor</td></tr>
+        <tr><td>Trinkets</td><td>Defender's Grip Stabilizer, Smotts' Compass</td><td>Vendor, quest: Facing Negolash</td></tr>
+        <tr><td>Main-hand</td><td>Guerrilla's Jagged Mace</td><td>Theramore / Darkspear rep (Revered)</td></tr>
+        <tr><td>Shield</td><td>Force Reactive Disk</td><td>Engineering</td></tr>
+        <tr><td>Libram</td><td>Sentinel's Libram</td><td>Vendor</td></tr>
+      </tbody>
+    </table></div>
+
+    </div>
+    <div class="panel" id="g-holy" data-title="Holy pre-raid gear list">
+    <h3><span class="pill holy">Holy</span> pre-raid list</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Slot</th><th>Item</th><th>Where from</th></tr></thead>
+      <tbody>
+        <tr><td>Head</td><td>Whitesoul Helm</td><td>Blacksmithing</td></tr>
+        <tr><td>Neck</td><td>Beads of Ogre Mojo</td><td>Quest: Falrin's Vendetta (Dire Maul)</td></tr>
+        <tr><td>Shoulder</td><td>Theramore Mantle</td><td>Theramore / Darkspear rep (Exalted)</td></tr>
+        <tr><td>Back</td><td>Hide of the Wild</td><td>Leatherworking</td></tr>
+        <tr><td>Chest / Hands / Legs</td><td>Breastplate of Salvation, Prefect's Gloves, Martyr's Legplates</td><td>Blacksmithing</td></tr>
+        <tr><td>Wrist</td><td>Lightforge Bracers</td><td>Scholomance trash</td></tr>
+        <tr><td>Waist</td><td>Redeemer's Waistcord</td><td>Vendor</td></tr>
+        <tr><td>Feet</td><td>Swarmtender's Footpads</td><td>Tailoring</td></tr>
+        <tr><td>Rings</td><td>Warden's Signet of Resolve, Blessed Band of Light</td><td>The Watchers (Exalted), vendor</td></tr>
+        <tr><td>Trinkets</td><td>Serenity Field, Dormant Heart of the Mountain</td><td>Vendor, Enchanting</td></tr>
+        <tr><td>Main-hand</td><td>Hand of Righteousness</td><td>High Inquisitor Whitemane (Scarlet Monastery)</td></tr>
+        <tr><td>Off-hand</td><td>Barkskin Baubles</td><td>Barkskin Burrow rep (Revered)</td></tr>
+        <tr><td>Libram</td><td>Libram of Economy</td><td>Vendor</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Prot and Holy lists: FrostyBoost, Oct 31. Some vendor costs weren't listed yet, and Blackmaw Hold and Shaper's Terrace loot wasn't in the database, so expect a few slots to change.</p>
+
+    </div>
+    <div class="panel" id="g-shock" data-title="Shockadin gear and stats">
+    <h3><span class="pill shock">Shockadin</span> gear</h3>
+    <div class="callout warn small">I couldn't find a full Shockadin pre-raid list published in a readable form yet. Start from the <b>Retribution list</b> and swap in plate with Intellect, spell damage and crit.</div>
+    <div class="two">
+      <div class="card small">
+        <b>Known good pieces</b>
+        <ul>
+          <li>Head: Lionheart Helm (Alliance) or Stalwart Helm (Horde)</li>
+          <li>Neck: Beads of Ogre Might</li>
+          <li>Head enchant: Arcanum of Rapidity (+1% attack speed)</li>
+          <li>Neck enchant: Spell Power (+6)</li>
+          <li>Weapon: a slow two-hander for the raid build, which takes Two-Handed Weapon Spec. Icy Veins leans toward faster weapons for Shockadin, so sources differ here.</li>
+        </ul>
+      </div>
+      <div class="card small">
+        <b>Stat priority</b>
+        <ul>
+          <li><b>Raid build:</b> Expertise, then spell damage, then Holy damage. Among the % stats: crit, then hit, then attack speed.</li>
+          <li><b>PvP build:</b> Stamina, then crit, Intellect, spell damage, Strength.</li>
+          <li>Intellect counts double for you: more mana, and spell power through Champion of the Light.</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+    <div class="panel" id="g-ench" data-title="Enchants and professions">
+    <div class="two">
+      <div class="card small">
+        <b>Enchants</b>
+        <ul>
+          <li>Melee weapon: Crusader</li>
+          <li>Healing weapon: Healing Power</li>
+          <li>Chest: Greater Stats (+4 all)</li>
+          <li>Hands: Greater Strength (Ret, Prot)</li>
+          <li>Wrists: Lesser Healing Power (Holy)</li>
+          <li>Shield: Greater Stamina</li>
+          <li>Feet: Minor Speed, but it doesn't stack with Pursuit of Justice, so Ret should pick something else</li>
+        </ul>
+      </div>
+      <div class="card small">
+        <b>Professions</b>
+        <ul>
+          <li><b>Mining + Blacksmithing:</b> the standard pick. Most pre-raid pieces for all three specs are crafted, and you save gold on plate.</li>
+          <li><b>Engineering:</b> if you plan to PvP. It also makes the Force Reactive Disk tank shield.</li>
+          <li><b>Cooking:</b> for the 5% kill-XP food while leveling.</li>
+          <li><b>First Aid and Fishing</b> as cheap extras.</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENDGAME -->
+<section id="endgame" class="view">
+  <div class="sec-head">
+    <div class="step">Step 7 · Level 60</div>
+    <h2>Endgame: what to do before December 9</h2>
+  </div>
+  <div class="stack">
+    <div class="tbl"><table>
+      <thead><tr><th>Raid</th><th>Size</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td><b>Barrow Deeps</b></td><td class="num">10</td><td>Blackmaw Hold, Kalimdor</td></tr>
+        <tr><td><b>Hyjal Summit</b></td><td class="num">20</td><td>Mount Hyjal, Kalimdor</td></tr>
+        <tr><td><b>Onyxia's Lair</b></td><td class="num">40</td><td>Needs the <b>Drakefire Amulet</b> attunement. The elite quests aren't soloable, so start early with friends.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="card">
+      <b>Your checklist at 60</b>
+      <ol>
+        <li>Respec into your raid role with Dual Spec. Keep Ret as the second spec for farming.</li>
+        <li>Farm reputation: <b>Theramore Expeditionary Force</b> (Alliance) or <b>Darkspear Raiders</b> (Horde) for weapons and shoulders, <b>The Watchers</b> for signet rings, and <b>Barkskin Burrow</b> for Holy.</li>
+        <li>Run the new dungeons <b>Blackmaw Hold</b> and <b>Shaper's Terrace</b> (Un'Goro, 58–60), plus Blackrock Spire, Dire Maul and Scholomance.</li>
+        <li>Level Blacksmithing and craft your set pieces.</li>
+        <li>Start the Onyxia attunement.</li>
+        <li>Find a guild on your ruleset and faction. Raids only group players from the same ruleset and faction.</li>
+      </ol>
+    </div>
+    <div class="callout small"><b>Balance outlook:</b> Blizzard raised class damage and creature health on Nov 5 and said it plans no big tuning changes before raids open. A larger pass is planned once more players are past level 30. The Nov 9 hotfix only fixed Seals not showing in the Cooldown Manager.</div>
+  </div>
+</section>
+
+<!-- PVP -->
+<section id="pvp" class="view">
+  <div class="sec-head">
+    <div class="step">Bonus</div>
+    <h2>PvP and duels</h2>
+  </div>
+  <div class="stack">
+    <div class="two">
+      <div class="card small">
+        <b>Why Paladin is strong</b>
+        <ul>
+          <li>Retribution moved up to <b>S tier</b> in LFCarry's Nov 2 PvP re-rating.</li>
+          <li>In the level 30 beta duel tournament, Paladin had the <b>highest qualifier win rate: 62.8%</b> over 877 duels.</li>
+          <li>Plate, self-heals, Divine Shield, Blessing of Freedom and Hammer of Justice make you very hard to kill.</li>
+          <li>Divine Precision now shortens Silence on you by 20%.</li>
+        </ul>
+      </div>
+      <div class="card small">
+        <b>How you lose</b>
+        <ul>
+          <li>No interrupt and no slow, so casters and kiters are your hardest matchups.</li>
+          <li>Slow two-hand swings. Once your burst is spent, you have to wait.</li>
+          <li>Spending all your mana on damage leaves nothing for heals. Keep enough for Holy Light after a bubble.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card small">
+      <b>Duel game plan (Ret)</b>
+      <ol>
+        <li>Use <b>Blessing of Freedom</b> to actually reach a kiter. Freedom only matters if it turns into melee contact.</li>
+        <li><b>Hammer of Justice</b>, then Judge with Seal of Command on the stunned target for the big hit (use the stun macro above).</li>
+        <li>Swap Seals for <b>Unsealed Wrath</b> during a burst window.</li>
+        <li><b>Repentance</b> a humanoid to reset a bad fight or stop a heal.</li>
+        <li>At low health: <b>Divine Shield</b>, heal to full, then go again.</li>
+        <li><b>Racials:</b> Human Will to Survive breaks stuns, and Undead Will of the Forsaken breaks fears. Save them for the enemy's key control.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="sources" class="view">
+  <div class="wrap stack">
+    <h2>Sources</h2>
+    <p class="small"><b>Hawary's Guide</b> · WoW Forever Paladin edition · November 2026</p>
+    <p class="small muted">Checked Nov 10, 2026. WoW Forever launched Nov 4, and most guides still use beta and pre-launch data for levels 31–60. Where sources disagreed, this guide follows the newest one and says so.</p>
+    <ul class="sources">
+      <li>Your uploaded video: "PALADIN: Everything You Need To Know In WoW Forever" (beta-era)</li>
+      <li><a href="https://wowcarry.com/blog/wow-forever/classes/paladin-guide">WoWCarry: Paladin Guide (Nov 4)</a></li>
+      <li><a href="https://conquestcapped.com/guides/wow-forever/wow-forever-paladin-overview/">ConquestCapped: Paladin Overview</a></li>
+      <li><a href="https://conquestcapped.com/guides/wow-forever/wow-forever-paladin-leveling/">ConquestCapped: Paladin Leveling</a></li>
+      <li><a href="https://www.wowhead.com/forever/news/massive-talent-tree-changes-to-druids-and-paladins-class-tuning-for-wow-forever-383670">Wowhead: Paladin talent tree changes</a></li>
+      <li><a href="https://mmonster.co/wow-forever/guides/paladin">MMOnster: Paladin (trainers, builds)</a></li>
+      <li><a href="https://leprestore.com/guides/world-of-warcraft-forever/wow-forever-paladin-guide-overview/">LePreStore: Paladin Overview</a></li>
+      <li><a href="https://www.method.gg/wow-forever/wow-forever-paladin-leveling-guide-and-talents">Method: Paladin Leveling</a></li>
+      <li><a href="https://www.icy-veins.com/wow-forever/holy-paladin-healer-pve-rotation-cooldowns-abilities">Icy Veins: Holy rotation and HPM</a></li>
+      <li><a href="https://www.icy-veins.com/wow-forever/retribution-paladin-melee-dps-pve-spec-builds-talents">Icy Veins: Ret builds</a></li>
+      <li><a href="https://www.icy-veins.com/wow-forever/protection-paladin-tank-pve-guide">Icy Veins: Protection guide</a></li>
+      <li><a href="https://www.warcrafttavern.com/forever/guides/paladin/">Warcraft Tavern: Paladin</a></li>
+      <li><a href="https://mobalytics.gg/wow-forever/guides/paladin-class-overview">Mobalytics: Paladin overview</a></li>
+      <li><a href="https://skycoach.gg/blog/wow-forever/articles/forever-paladin-guide">Skycoach: Paladin guide</a></li>
+      <li><a href="https://wow.gg/guides/paladin-holy-forever-overview">wow.gg: Holy changes</a></li>
+      <li><a href="https://kami-labs.fr/en/wow-forever/macros-wow-forever-9-classes/">Kami Labs: macro rank tip</a></li>
+      <li><a href="https://rankedboost.com/world-of-warcraft/forever/macros/paladin/">RankedBoost: Paladin macros</a></li>
+      <li><a href="https://timesaver.gg/tools/wow-forever/leveling-gear/paladin/retribution">Timesaver: Ret gear (Nov 6)</a></li>
+      <li><a href="https://frostyboost.com/blog/guides/wow-forever-bis-list">FrostyBoost: Pre-raid BiS (Oct 31)</a></li>
+      <li><a href="https://lfcarry.com/guides/wow-forever-tier-list">LFCarry: Tier list and duel data (Nov 6)</a></li>
+      <li><a href="https://us.forums.blizzard.com/en/wow/t/current-forever-classspec-dps-tier-list/2389217">Blizzard forums: community DPS sim</a></li>
+      <li><a href="https://www.mmoexp.com/News/wow-forever-hotfix-guide-50-dungeon-xp-buff-leveling-tips-gold-changes-and-class-tuning.html">MMOEXP: launch-week hotfixes and class share</a></li>
+      <li><a href="https://us.forums.blizzard.com/en/wow/t/wow-forever-hotfixes-november-9-2026/2403040/5">Blizzard: Hotfixes Nov 9</a></li>
+      <li><a href="https://foreverchanges.pro/patch-notes">ForeverChanges: patch notes</a></li>
+      <li><a href="https://kovarel.com/wow-forever/tools/talent-calculator/paladin/shockadin">Kovarel: Shockadin 23/0/28</a></li>
+      <li><a href="https://sixtysim.com/guides/paladin/shockadin/">SixtySim: Shockadin sim (search summary)</a></li>
+      <li><a href="https://wowforevertalent.online/builds/shockadin/">WoW Forever Talent: PvP Shockadin 27/0/24</a></li>
+      <li><a href="https://kami-labs.fr/en/wow-forever/build-paladin-sacre-protection-wow-forever/">Kami Labs: Holy/Prot hybrid tank</a></li>
+      <li><a href="https://rankedboost.com/world-of-warcraft/forever/build/paladin/">RankedBoost: Paladin builds (Holy/Prot PvP)</a></li>
+      <li><a href="https://theforeverguides.com/classes/paladin/shockadin/">The Forever Guides: Shockadin leveling</a></li>
+      <li><a href="https://www.icy-veins.com/wow-forever/retribution-paladin-melee-dps-pve-guide">Icy Veins: Ret vs Shockadin at 60</a></li>
+      <li><a href="https://lfcarry.com/guides/wow-forever-protection-paladin-pvp">LFCarry: Prot Paladin PvP (B)</a></li>
+      <li><a href="https://worldofwarcraft.blizzard.com/news/24303009">Blizzard: Raid overview</a></li>
+      <li><a href="https://allthings.how/?p=331235">AllThings.How: Raid dates and attunement</a></li>
+    </ul>
+  </div>
+</footer>
+
+<button class="helpfab" id="helpOpen" type="button" aria-haspopup="dialog">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.2 9.3a2.9 2.9 0 0 1 5.6 1c0 2-2.8 2.4-2.8 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.6" r="1.2" fill="currentColor"/></svg>
+  Stuck? Help
+</button>
+
+<dialog class="help" id="help" aria-labelledby="helpTitle">
+<div class="help-inner">
+  <div class="help-top">
+    <div class="help-title">
+      <div>
+        <div class="kicker">Hawary's Guide · Open anytime</div>
+        <h2 id="helpTitle">Stuck? Quick help</h2>
+      </div>
+      <button class="xbtn" id="helpClose" type="button" aria-label="Close help">Close</button>
+    </div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="helpSearch" type="search" placeholder="Search: bags, mount, rested, dungeon, armor…" aria-label="Search help topics" autocomplete="off">
+    </div>
+    <div class="chips" role="group" aria-label="Jump to a topic group">
+      <button type="button" data-jump="g-fix">I'm stuck</button>
+      <button type="button" data-jump="g-start">Getting started</button>
+      <button type="button" data-jump="g-screen">Screen &amp; settings</button>
+      <button type="button" data-jump="g-quest">Quests &amp; leveling</button>
+      <button type="button" data-jump="g-combat">Combat &amp; death</button>
+      <button type="button" data-jump="g-gear">Gear &amp; stats</button>
+      <button type="button" data-jump="g-money">Bags &amp; gold</button>
+      <button type="button" data-jump="g-group">Groups</button>
+      <button type="button" data-jump="g-prof">Professions</button>
+      <button type="button" data-jump="g-travel">Travel &amp; mounts</button>
+      <button type="button" data-jump="all">All topics</button>
+    </div>
+  </div>
+
+  <div class="help-body" id="helpBody">
+
+    <div class="help-group" id="g-fix">
+      <h3>I'm stuck because…</h3>
+      <div class="fixes">
+        <button type="button" data-go="h-trainers"><b>My damage suddenly feels awful</b><span>You're probably still casting rank 1. Re-drag new ranks.</span></button>
+        <button type="button" data-go="h-weapons"><b>I keep missing</b><span>Your weapon skill is low, or the mob is 3+ levels above you.</span></button>
+        <button type="button" data-go="h-weapons"><b>I can't equip this weapon</b><span>Learn it from a Weapon Master.</span></button>
+        <button type="button" data-go="h-inventory"><b>My bags are full</b><span>Sell junk, buy bags, mail loot to an auction alt.</span></button>
+        <button type="button" data-go="h-death"><b>I died far from my body</b><span>Corpse run (free) or Spirit Healer (costs you).</span></button>
+        <button type="button" data-go="h-findnpc"><b>Where's the bank or trainer?</b><span>Ask a city guard; it puts a flag on your map.</span></button>
+        <button type="button" data-go="h-mobs"><b>This quest mob is too strong</b><span>Gold dragon means elite. Group up.</span></button>
+        <button type="button" data-go="h-professions"><b>I can't gather this node</b><span>Your gathering skill fell behind the zone.</span></button>
+        <button type="button" data-go="h-macro"><b>Auto-attack keeps switching off</b><span>Use a macro that only turns it on.</span></button>
+        <button type="button" data-go="h-travel"><b>Running everywhere takes forever</b><span>Flight paths, hearthstone, zeppelins, mount at 40.</span></button>
+        <button type="button" data-go="h-combat"><b>A mob is chasing me and I'm losing</b><span>Stop attacking and keep running until it leashes.</span></button>
+        <button type="button" data-go="h-dungeons"><b>Leveling feels slow</b><span>Dungeon quests and rested XP give the most XP.</span></button>
+      </div>
+    </div>
+
+    <div class="help-group" id="g-start">
+      <h3>Getting started</h3>
+
+      <details class="topic" id="h-ruleset"><summary><span class="t">Ruleset: Normal, PvP, Roleplay or Hardcore?</span><span class="a">Normal (PvE) is what about 90% of players pick.</span></summary><div class="tb">
+        <ul>
+          <li>Forever has no separate servers. Everyone in a region shares one world, and you pick a ruleset instead.</li>
+          <li><b>Normal</b> is PvE. <b>PvP</b> lets the other faction attack you in the world. <b>Roleplay</b> is for people who play in character.</li>
+          <li><b>Hardcore:</b> if you die, the character isn't deleted. It loses its Hardcore tag and becomes a Normal character, so there's no harm trying it.</li>
+          <li>Hardcore has far fewer players, so dungeon groups and help with elite quests are harder to find.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-faction"><summary><span class="t">Faction: Alliance or Horde?</span><span class="a">Pick the same faction as your friends. You can't group across factions.</span></summary><div class="tb">
+        <ul>
+          <li>Alliance and Horde players can't group together, so match your friends.</li>
+          <li>You can make characters on the other faction later, unless you have a PvP character: a PvP Alliance character stops you from making Horde characters.</li>
+          <li>Every class can now be played on either faction, for example the Undead Paladin or the Dwarf Shaman.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-race-role"><summary><span class="t">Race, class and role</span><span class="a">Race barely changes damage. It decides your starting zone and your class options.</span></summary><div class="tb">
+        <ul>
+          <li>Your race decides which classes you can play and where you start.</li>
+          <li>Racials are situational, not big damage boosts: Dwarf Stoneform makes you immune to bleeds, poisons and diseases, and Human Will to Survive removes stuns. Treat it as mostly a cosmetic choice; Blizzard keeps adjusting these.</li>
+          <li><b>Tank</b> leads the group. Forever has 9 brand-new dungeons that nobody knows yet, which makes this a good time to learn tanking. <b>Healer</b> keeps the group alive. Both are more stressful than <b>ranged DPS</b>.</li>
+          <li><b>Playing with a friend of another race?</b> Not every starting zone has every class trainer. A Paladin who walks to a Night Elf start won't find a Paladin trainer, and you train every 2 levels.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-legacy"><summary><span class="t">Legacy system: what to pick</span><span class="a">Well-Rested plus Talented gives you talent points from level 5.</span></summary><div class="tb">
+        <ul>
+          <li>Legacy points fill a reward track that unlocks things like a pet and a mount.</li>
+          <li>You earn points from Legacy Challenges: a class reaching 25, 45 and 60 (3 points per class, 27 for all nine), plus professions, PvP, exploring and dungeons.</li>
+          <li>Three Legacy trees: <b>Professions</b> (faster leveling, more rare materials), <b>Adventure</b> and <b>Resourcefulness</b> (longer food buffs, less durability loss on death).</li>
+          <li><b>Best pick per the video:</b> 5 points in Well-Rested, then 5 in Talented. You start getting talent points at level 5 instead of 10, so you have 5 extra while leveling.</li>
+          <li>This system is new and may be rebalanced. Check the current tooltips in game.</li>
+        </ul>
+      </div></details>
+    </div>
+
+    <div class="help-group" id="g-screen">
+      <h3>Screen &amp; settings</h3>
+
+      <details class="topic" id="h-settings"><summary><span class="t">Settings to change before you play</span><span class="a">Tick them off here. Your ticks are saved in this browser.</span></summary><div class="tb">
+        <div class="check" id="settingsList">
+          <label><input type="checkbox" id="s1"><span>Turn on <b>Auto Loot</b> (Controls)</span></label>
+          <label><input type="checkbox" id="s2"><span><b>Combine bags</b> into one big bag. Click a bag to switch back or to sort.</span></label>
+          <label><input type="checkbox" id="s3"><span><b>Replace player frame portraits</b> with class icons, so you see everyone's class at a glance</span></label>
+          <label><input type="checkbox" id="s4"><span>Turn <b>off</b> "show low-level quests" to hide grey, useless quests</span></label>
+          <label><input type="checkbox" id="s5"><span><b>Show free bag space</b> (bottom right)</span></label>
+          <label><input type="checkbox" id="s6"><span>Paladin: set debuff display to <b>"dispel by me"</b> so things you can cleanse stand out</span></label>
+          <label><input type="checkbox" id="s7"><span>Enable <b>action bars 2 and 3</b> for your situational spells</span></label>
+          <label><input type="checkbox" id="s8"><span>Turn on <b>show silhouette when obscured</b> and <b>loss of control alerts</b></span></label>
+          <label><input type="checkbox" id="s9"><span>Use <b>Quick Keybind Mode</b>: hover a spell and press a key. Q and R are great for spells you press a lot.</span></label>
+          <label><input type="checkbox" id="s10"><span>Nameplates: <b>always show enemy nameplates</b> (health bars over heads). Healers: friendly nameplates too.</span></label>
+          <label><input type="checkbox" id="s11"><span>Camera follow style: <b>Never adjust camera</b></span></label>
+          <label><input type="checkbox" id="s12"><span>Minimap magnifying glass: turn on tracking for the <b>auction house, banker, innkeeper and mailbox</b></span></label>
+        </div>
+        <p class="small muted">Controller player? Tick "Gamepad (alpha)". Using an MMO mouse? Start with it now; switching later is harder because of muscle memory. Don't turn on invert mouse.</p>
+      </div></details>
+
+      <details class="topic" id="h-hotkeys"><summary><span class="t">Hotkeys for every menu</span><span class="a">C, K, P, N, Y, L, I, M. You can also click the buttons under your XP bar.</span></summary><div class="tb">
+        <figure class="fig">
+          <div class="vis keys" role="img" aria-label="Keyboard keys: C character, K professions, P spellbook, N talents, Y legacy, L quest log, I group finder, M map">
+            <div class="vcell"><span class="keycap">C</span><span class="ct">Character</span></div>
+            <div class="vcell"><span class="keycap">K</span><span class="ct">Professions</span></div>
+            <div class="vcell"><span class="keycap">P</span><span class="ct">Spellbook</span></div>
+            <div class="vcell"><span class="keycap">N</span><span class="ct">Talents</span></div>
+            <div class="vcell"><span class="keycap">Y</span><span class="ct">Legacy</span></div>
+            <div class="vcell"><span class="keycap">L</span><span class="ct">Quest log</span></div>
+            <div class="vcell"><span class="keycap">I</span><span class="ct">Group finder</span></div>
+            <div class="vcell"><span class="keycap gold">M</span><span class="ct">Map</span></div>
+          </div>
+          <figcaption>Forgot one? The same menus are buttons under your XP bar.</figcaption>
+        </figure>
+      </div></details>
+
+      <details class="topic" id="h-ui"><summary><span class="t">What's on my screen?</span><span class="a">A map of the default UI and what each part does.</span></summary><div class="tb">
+        <figure class="fig wide">
+          <svg viewBox="0 0 640 372" role="img" aria-label="Diagram of the default game screen">
+            <rect x="8" y="8" width="624" height="356" rx="12" class="s-bg s-inkst" stroke-width="1.5"/>
+            <g font-size="12.5">
+              <rect x="22" y="22" width="178" height="58" rx="8" class="s-holy" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text x="32" y="44" font-weight="700" class="s-ink">Player &amp; party frames</text>
+              <text x="32" y="64" class="s-mut">Right-click a portrait for options</text>
+              <rect x="22" y="90" width="178" height="48" rx="8" class="s-holy" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text x="32" y="110" font-weight="700" class="s-ink">Damage meter</text>
+              <text x="32" y="128" class="s-mut">Built-in, if turned on</text>
+              <rect x="268" y="22" width="190" height="48" rx="8" class="s-holy" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text x="278" y="42" font-weight="700" class="s-ink">Buffs and debuffs</text>
+              <text x="278" y="60" class="s-mut">Right-click a buff to remove it</text>
+              <circle cx="562" cy="76" r="54" class="s-holy" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text x="562" y="66" text-anchor="middle" font-weight="700" class="s-ink">Minimap</text>
+              <text x="562" y="84" text-anchor="middle" class="s-mut">+/− zoom</text>
+              <text x="562" y="100" text-anchor="middle" class="s-mut">tracking, mail</text>
+              <rect x="476" y="146" width="146" height="94" rx="8" class="s-holy" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text x="486" y="168" font-weight="700" class="s-ink">Tracked quests</text>
+              <text x="486" y="188" class="s-mut">Click one: opens it</text>
+              <text x="486" y="205" class="s-mut">and shows an arrow</text>
+              <text x="486" y="222" class="s-mut">on your minimap</text>
+              <rect x="22" y="250" width="196" height="100" rx="8" class="s-holy" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text x="32" y="272" font-weight="700" class="s-ink">Chat</text>
+              <text x="32" y="292" class="s-mut">Skill-ups and level-ups</text>
+              <text x="32" y="309" class="s-mut">show up here too</text>
+              <rect x="236" y="262" width="222" height="40" rx="8" class="s-holy" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text x="347" y="287" text-anchor="middle" font-weight="700" class="s-ink">Action bars</text>
+              <rect x="236" y="310" width="222" height="10" rx="3" fill="#8b4fd0"/>
+              <rect x="350" y="310" width="60" height="10" rx="0" fill="#4a90e2"/>
+              <text x="466" y="320" class="s-mut">XP bar</text>
+              <rect x="266" y="328" width="162" height="22" rx="6" class="s-holy" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text x="347" y="343" text-anchor="middle" class="s-ink">Menu buttons</text>
+            </g>
+          </svg>
+          <figcaption>On a phone, swipe the picture sideways to see all of it. Press Escape, then Edit Mode, to move and resize any of these. Moving your bars and frames to the center keeps your eyes on the fight.</figcaption>
+        </figure>
+      </div></details>
+
+      <details class="topic" id="h-addons"><summary><span class="t">Add-ons: how to install them</span><span class="a">CurseForge standalone, choose WoW Forever, install, then type /reload.</span></summary><div class="tb">
+        <ol>
+          <li>Go to curseforge.com, click <b>Get CurseForge app</b>, and choose the <b>standalone</b> download. Skip the Overwolf version, which adds extra software.</li>
+          <li>Install it, add World of Warcraft (scan or add manually), and choose the <b>WoW Forever</b> version.</li>
+          <li>Go to Browse, search the add-on's name and click Install.</li>
+          <li>In game, type <span class="kbd">/reload</span> in chat. Spread out the add-on icons that stack on your minimap.</li>
+        </ol>
+        <p><b>The three the video recommends:</b></p>
+        <ul>
+          <li><b>Auctionator:</b> at the auction house, use Full Scan. After that, item tooltips show the vendor price and the auction price, so you know what to sell where.</li>
+          <li><b>Questie:</b> shows quests for your level on the whole world map. Hold Shift over one to see its rewards. It also shows where quest mobs and items are.</li>
+          <li><b>RareScanner:</b> shows rare spawns (red icons), the area they can appear in and their loot.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-macro"><summary><span class="t">Auto-attack keeps turning off</span><span class="a">Auto-attack is a toggle. A macro can make the button only turn it on.</span></summary><div class="tb">
+        <p>Pressing auto-attack twice turns it off, and you end up standing there getting hit. A macro fixes this so the button always turns it on. The command for that is <span class="kbd">/startattack</span>, which is already inside the "Holy Strike that judges" macro in the main guide's Macros section.</p>
+      </div></details>
+    </div>
+
+    <div class="help-group" id="g-quest">
+      <h3>Quests &amp; leveling</h3>
+
+      <details class="topic" id="h-quest-markers"><summary><span class="t">What do the ! and ? marks mean?</span><span class="a">Yellow ! = take it. Silver ? = not done. Silver ! = too low level. Blue = repeatable.</span></summary><div class="tb">
+        <figure class="fig">
+          <div class="vis" role="img" aria-label="Quest markers: yellow exclamation accept, silver question not finished, silver exclamation too low level, blue repeatable, green exclamation flight path">
+            <div class="vcell"><span class="glyph" style="color:#f2c230">!</span><span class="ct">Yellow !</span><span class="cs">Quest to accept</span></div>
+            <div class="vcell"><span class="glyph" style="color:#c3c8d1">?</span><span class="ct">Silver ?</span><span class="cs">Accepted, not done</span></div>
+            <div class="vcell"><span class="glyph" style="color:#c3c8d1">!</span><span class="ct">Silver !</span><span class="cs">Your level is too low</span></div>
+            <div class="vcell"><span class="glyph" style="color:#4a90e2">!?</span><span class="ct">Blue ! or ?</span><span class="cs">Repeatable quest</span></div>
+            <div class="vcell"><span class="glyph" style="color:#3fae5a">!</span><span class="ct">Green !</span><span class="cs">Flight path</span></div>
+          </div>
+        </figure>
+        <p class="small">If a quest offers a choice of rewards, you have to click one before the game lets you turn it in.</p>
+      </div></details>
+
+      <details class="topic" id="h-quest-tools"><summary><span class="t">Where do I go for this quest?</span><span class="a">Press M. Quest areas are marked on the map.</span></summary><div class="tb">
+        <ul>
+          <li>Press <span class="kbd">M</span>: your accepted quests show where to go and where to turn in.</li>
+          <li>Click an enemy: under its name (bottom right) you'll see if it's for a quest, like "0/10". In a group it shows your friends' progress too.</li>
+          <li>Group quest items are now shared out evenly, so you and a friend both reach 10/10 at about the same time.</li>
+          <li>Your quest log holds <b>40 quests</b> (it used to be 20). Untrack quests to tidy the screen, but don't forget them.</li>
+          <li><b>Elite quests</b> ask you to kill an elite. Don't solo them; find a group in the area.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-leveling"><summary><span class="t">The fastest ways to level</span><span class="a">Questing, plus dungeon quests. Grinding is rarely needed now.</span></summary><div class="tb">
+        <ul>
+          <li><b>Questing</b> is the main way. Most of the XP comes from turning the quest in.</li>
+          <li><b>Dungeons:</b> most of their XP now comes from the dungeon's quests, so you don't need to run the same dungeon over and over. Run it again only for a gear drop you missed.</li>
+          <li><b>Grinding mobs</b> is rarely needed: Forever added over 1,000 new quests, so each quest hub leads to the next.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-rested"><summary><span class="t">Rested XP: the blue part of my XP bar</span><span class="a">Double XP until the marker. Log out in an inn or a capital city.</span></summary><div class="tb">
+        <figure class="fig">
+          <svg viewBox="0 0 400 112" role="img" aria-label="XP bar with a purple filled section and a blue rested section">
+            <text x="0" y="16" font-size="13" font-weight="700" class="s-ink">Your XP</text>
+            <text x="400" y="16" font-size="13" font-weight="700" fill="#4a90e2" text-anchor="end">Rested: 200% XP to the marker</text>
+            <rect x="1" y="28" width="398" height="22" rx="5" class="s-surf s-inkst" stroke-width="1"/>
+            <rect x="2" y="29" width="148" height="20" rx="4" fill="#8b4fd0"/>
+            <rect x="150" y="29" width="150" height="20" fill="#4a90e2" opacity=".45"/>
+            <line x1="300" y1="22" x2="300" y2="56" stroke="#4a90e2" stroke-width="3"/>
+            <text x="0" y="80" font-size="12.5" class="s-mut">Look for Zzz on your portrait. Logging out there</text>
+            <text x="0" y="98" font-size="12.5" class="s-mut">builds rested XP, whether you're in game or not.</text>
+          </svg>
+          <figcaption>Out questing? Log out in the local inn, where you can also set your hearthstone.</figcaption>
+        </figure>
+      </div></details>
+
+      <details class="topic" id="h-trainers"><summary><span class="t">Class trainer: new spells every 2 levels</span><span class="a">New ranks are NOT put on your bar for you. Re-drag them.</span></summary><div class="tb">
+        <ul>
+          <li>Visit your trainer at levels 2, 4, 6, 8 and so on. It gets more expensive as you level, so save gold for it.</li>
+          <li><b>The most common new-player mistake:</b> new ranks go into your spellbook, not onto your bar. Open the spellbook (<span class="kbd">P</span>). A <b>glowing</b> spell isn't on your bar yet. Drag it over the old rank.</li>
+          <li>Need an old cheap rank on purpose? Use the arrow in the spellbook and pick "show all spell ranks".</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-talents"><summary><span class="t">Talents and respecs</span><span class="a">Talents start at 10. Respec at a trainer, but not every trainer can do it.</span></summary><div class="tb">
+        <ul>
+          <li>Your talent tree decides your role. A Paladin can be Retribution (DPS), Protection (tank) or Holy (healer).</li>
+          <li>Talents can give new abilities (like Templar's Bulwark) or change how one works. New talent spells also glow in the spellbook until you put them on your bar.</li>
+          <li>Most builds spend points in more than one tree. Name your main one when people ask: "I'm a Prot Paladin", not just "a Paladin".</li>
+          <li>To reset talents, talk to a trainer and choose to unlearn them. Not every trainer offers this, so look up the nearest one that does.</li>
+        </ul>
+      </div></details>
+    </div>
+
+    <div class="help-group" id="g-combat">
+      <h3>Combat &amp; death</h3>
+
+      <details class="topic" id="h-mobs"><summary><span class="t">Can I fight this mob? Read its colors</span><span class="a">Yellow or green level = fine. Orange = hard. Red or skull = walk away.</span></summary><div class="tb">
+        <figure class="fig">
+          <div class="vis" role="img" aria-label="Mob level colors from grey to skull and what each means">
+            <div class="vcell"><span class="sw" style="background:#9aa0a8;color:#141414">Grey</span><span class="ct">No XP</span><span class="cs">Not worth it</span></div>
+            <div class="vcell"><span class="sw" style="background:#2f8f47;color:#fff">Green</span><span class="ct">Below you</span><span class="cs">Easy, less XP</span></div>
+            <div class="vcell"><span class="sw" style="background:#e8b923;color:#141414">Yellow</span><span class="ct">Within 2 levels</span><span class="cs">Fair fight</span></div>
+            <div class="vcell"><span class="sw" style="background:#e07b1f;color:#141414">Orange</span><span class="ct">3–4 above</span><span class="cs">Hard, crushing hits</span></div>
+            <div class="vcell"><span class="sw" style="background:#c8322a;color:#fff">Red</span><span class="ct">5–9 above</span><span class="cs">Don't solo it</span></div>
+            <div class="vcell"><span class="sw" style="background:#2a1416;color:#f2f2f2"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="10" r="8" fill="#f2f2f2"/><circle cx="9" cy="9.5" r="2" fill="#2a1416"/><circle cx="15" cy="9.5" r="2" fill="#2a1416"/><rect x="8.5" y="15" width="7" height="6" rx="1.5" fill="#f2f2f2"/></svg>Skull</span><span class="ct">10+ above</span><span class="cs">It will kill you</span></div>
+          </div>
+          <div class="legend" style="margin-top:10px">
+            <b>Name color:</b>
+            <span><i style="background:#e8b923"></i>Yellow: won't attack first</span>
+            <span><i style="background:#c8322a"></i>Red: attacks if you get close</span>
+            <span><i style="background:#2f8f47"></i>Green: friendly</span>
+          </div>
+          <figcaption>The level number's color is the one to read. Green quests are still quick, safe XP.</figcaption>
+        </figure>
+        <figure class="fig">
+          <svg viewBox="0 0 440 128" role="img" aria-label="Portrait with gold dragon means elite, silver dragon means rare elite">
+            <g>
+              <path d="M76 36 L46 16 L56 42 L36 50 L58 60 L46 78 L76 70 Z" fill="#d8a92c"/>
+              <circle cx="110" cy="54" r="34" class="s-surf" stroke="#d8a92c" stroke-width="6"/>
+              <text x="110" y="60" text-anchor="middle" font-size="13" font-weight="700" class="s-ink">Elite</text>
+              <path d="M296 36 L266 16 L276 42 L256 50 L278 60 L266 78 L296 70 Z" fill="#b8bec9"/>
+              <circle cx="330" cy="54" r="34" class="s-surf" stroke="#b8bec9" stroke-width="6"/>
+              <text x="330" y="60" text-anchor="middle" font-size="13" font-weight="700" class="s-ink">Rare</text>
+            </g>
+            <text x="110" y="112" text-anchor="middle" font-size="12.5" class="s-ink">Gold dragon: elite, bring friends</text>
+            <text x="330" y="112" text-anchor="middle" font-size="12.5" class="s-ink">Silver dragon: rare elite, good loot</text>
+          </svg>
+        </figure>
+      </div></details>
+
+      <details class="topic" id="h-combat"><summary><span class="t">Why am I losing fights?</span><span class="a">Fighting 2 mobs at once, or mobs 3+ levels above you.</span></summary><div class="tb">
+        <figure class="fig">
+          <svg viewBox="0 0 400 186" role="img" aria-label="Chance for your spells to miss: 6 percent against mobs 2 levels higher, 17 percent against mobs 3 levels higher">
+            <g class="s-line" stroke-width="1">
+              <line x1="1" y1="22" x2="1" y2="124"/><line x1="96" y1="22" x2="96" y2="124"/><line x1="191" y1="22" x2="191" y2="124"/><line x1="286" y1="22" x2="286" y2="124"/><line x1="381" y1="22" x2="381" y2="124"/>
+            </g>
+            <g font-size="12" class="s-mut">
+              <text x="1" y="140">0%</text><text x="96" y="140" text-anchor="middle">5%</text><text x="191" y="140" text-anchor="middle">10%</text><text x="286" y="140" text-anchor="middle">15%</text><text x="381" y="140" text-anchor="end">20%</text>
+            </g>
+            <text x="0" y="16" font-size="13" font-weight="700" class="s-ink">Mob 2 levels above you</text>
+            <rect x="1" y="24" width="114" height="28" rx="4" fill="#e8b923"/>
+            <text x="122" y="43" font-size="14" font-weight="700" class="s-ink">6% miss</text>
+            <text x="0" y="74" font-size="13" font-weight="700" class="s-ink">Mob 3 levels above you</text>
+            <rect x="1" y="82" width="323" height="28" rx="4" fill="#e07b1f"/>
+            <text x="316" y="101" font-size="14" font-weight="700" fill="#141414" text-anchor="end">17% miss</text>
+            <text x="0" y="164" font-size="12.5" class="s-mut">From 3 levels up, mobs can also land crushing</text>
+            <text x="0" y="181" font-size="12.5" class="s-mut">blows that deal 150% damage.</text>
+          </svg>
+        </figure>
+        <ul>
+          <li>Two mobs standing together? Pull or crowd-control one first. Classic-style combat is punishing.</li>
+          <li>Use your self-buffs and crowd control (Paladin: Hammer of Justice), then bandage if a fight goes bad.</li>
+          <li><b>Losing?</b> Stop attacking and keep running. A mob stops chasing (leashes) once you stop hitting it, unless you pull more on the way.</li>
+          <li>Mobs hitting your back can <b>daze</b> you and slow you. Try to keep facing them as you back off, or stun and run.</li>
+          <li>Let mobs hit you sometimes: your <b>defense</b> skill levels from being hit and makes you harder to hit.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-healing"><summary><span class="t">How do I heal up?</span><span class="a">Food out of combat. Potions and bandages in combat.</span></summary><div class="tb">
+        <ul>
+          <li><b>Food</b> restores health and <b>drinks</b> restore mana, out of combat only. Some food gives a <b>Well Fed</b> buff (example: +7 Stamina and Spirit for 15 min).</li>
+          <li><b>Potions</b> work in combat. Healing potions are now made with <b>First Aid</b>, not Alchemy. Buying them on the auction house is fine too.</li>
+          <li><b>Bandages</b> work in combat but are a channeled heal over time (example: 114 over 6 sec). Get distance first, because a hit cancels the rest. They have a cooldown.</li>
+          <li>Paladin: you also have your own heals.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-death"><summary><span class="t">I died. Now what?</span><span class="a">Run your ghost to your body for free, or use the Spirit Healer for a price.</span></summary><div class="tb">
+        <figure class="fig">
+          <svg viewBox="0 0 380 300" role="img" aria-label="After death: release spirit, then either run to your corpse for no penalty or use the spirit healer for durability loss and resurrection sickness">
+            <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="s-ink"/></marker></defs>
+            <rect x="120" y="4" width="140" height="38" rx="8" class="s-surf s-inkst" stroke-width="1.5"/>
+            <text x="190" y="28" text-anchor="middle" font-size="14" font-weight="700" class="s-ink">You died</text>
+            <line x1="190" y1="42" x2="190" y2="62" class="s-inkst" stroke-width="1.5" marker-end="url(#arr)"/>
+            <rect x="105" y="64" width="170" height="38" rx="8" class="s-surf s-goldst" stroke-width="2"/>
+            <text x="190" y="88" text-anchor="middle" font-size="14" font-weight="700" class="s-ink">Release Spirit</text>
+            <path d="M150 102 L100 132" class="s-inkst" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+            <path d="M230 102 L280 132" class="s-inkst" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+            <rect x="1" y="134" width="183" height="74" rx="8" fill="#e3f5ea" stroke="#1f7a45" stroke-width="1.5"/>
+            <text x="92" y="158" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14532d">Run to your corpse</text>
+            <text x="92" y="178" text-anchor="middle" font-size="12.5" fill="#14532d">Resurrect there.</text>
+            <text x="92" y="196" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14532d">No penalty.</text>
+            <rect x="196" y="134" width="183" height="74" rx="8" fill="#fff3dc" stroke="#9a5b00" stroke-width="1.5"/>
+            <text x="287" y="158" text-anchor="middle" font-size="13.5" font-weight="700" fill="#5c3700">Spirit Healer</text>
+            <text x="287" y="178" text-anchor="middle" font-size="12.5" fill="#5c3700">at the graveyard.</text>
+            <text x="287" y="196" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5c3700">Instant, but costs you:</text>
+            <line x1="287" y1="208" x2="287" y2="226" class="s-inkst" stroke-width="1.5" marker-end="url(#arr)"/>
+            <text x="287" y="246" text-anchor="middle" font-size="12.5" font-weight="700" class="s-ink">−25% durability on gear</text>
+            <text x="287" y="264" text-anchor="middle" font-size="12.5" class="s-ink">+ about 7 min of</text>
+            <text x="287" y="281" text-anchor="middle" font-size="12.5" class="s-ink">−75% stats and damage</text>
+            <text x="1" y="246" font-size="12.5" class="s-mut">Healer nearby?</text>
+            <text x="1" y="264" font-size="12.5" class="s-mut">They can resurrect</text>
+            <text x="1" y="281" font-size="12.5" class="s-mut">you instead.</text>
+          </svg>
+        </figure>
+        <ul>
+          <li>Resurrection sickness cuts your attributes, damage, armor and resistances by 75%. You can barely kill anything until it ends.</li>
+          <li>The Spirit Healer is often still faster than a long corpse run: by the time you repair, turn in quests and walk to the next mobs, the sickness is nearly gone.</li>
+          <li>Repair whenever you pass a repair vendor ("Repair all items"). Broken gear acts like an empty slot. The armor figure on screen turns yellow, then red, as pieces wear out.</li>
+          <li>Trick: dying near a graveyard next to a quest town can save you a long walk back.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-honor"><summary><span class="t">PvP honor: don't kill grey players</span><span class="a">Killing much lower players is dishonorable and lowers your rank.</span></summary><div class="tb">
+        <ul>
+          <li>Players who are green or higher to you count as <b>honorable kills</b>.</li>
+          <li>Grey (much lower level) players are <b>dishonorable kills</b>, which pull your honor rank down.</li>
+          <li>Your honor tab tracks your rank and your kills this week, last week and lifetime.</li>
+        </ul>
+      </div></details>
+    </div>
+
+    <div class="help-group" id="g-gear">
+      <h3>Gear &amp; stats</h3>
+
+      <details class="topic" id="h-slots"><summary><span class="t">Gear slots, and when you'll find them</span><span class="a">Shoulders and rings from about 15, neck early 20s, helmet late 20s, trinkets 30s.</span></summary><div class="tb">
+        <ul>
+          <li>Slots: head, neck, shoulders, back (cloak), chest, shirt (cosmetic), tabard (guild), wrists, hands, waist, legs, feet, 2 rings, 2 trinkets, main hand, off hand and ranged.</li>
+          <li>Bows and guns need ammo in the ammo slot. Wands don't.</li>
+          <li>Rough timing: shoulders and rings from about level 15, neck in your early 20s, helmet in your late 20s, trinkets in your 30s. Crafted items can come earlier.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-armor"><summary><span class="t">Armor types</span><span class="a">Wear your heaviest type and everything lighter.</span></summary><div class="tb">
+        <figure class="fig">
+          <svg viewBox="0 0 400 196" role="img" aria-label="Armor weights from cloth to plate as rising steps">
+            <text x="0" y="15" font-size="12.5" class="s-ink">If you can wear plate, you can wear all four.</text>
+            <text x="0" y="33" font-size="12.5" class="s-mut">Cloth wearers can only wear cloth.</text>
+            <rect x="0" y="150" width="94" height="44" rx="6" fill="#c9cdd6"/>
+            <rect x="102" y="120" width="94" height="74" rx="6" fill="#b8a07a"/>
+            <rect x="204" y="90" width="94" height="104" rx="6" fill="#8e9bab"/>
+            <rect x="306" y="56" width="94" height="138" rx="6" fill="#d8a92c"/>
+            <g text-anchor="middle" font-size="14" font-weight="700" fill="#141414">
+              <text x="47" y="176">Cloth</text><text x="149" y="146">Leather</text><text x="251" y="116">Mail</text><text x="353" y="82">Plate</text>
+            </g>
+          </svg>
+        </figure>
+      </div></details>
+
+      <details class="topic" id="h-rarity"><summary><span class="t">Item colors: what's good?</span><span class="a">Grey &lt; white &lt; green &lt; blue &lt; purple.</span></summary><div class="tb">
+        <figure class="fig">
+          <div class="vis" role="img" aria-label="Item quality colors from grey to purple">
+            <div class="vcell"><span class="sw" style="background:#9d9d9d;color:#141414">Grey</span><span class="cs">Worst, junk</span></div>
+            <div class="vcell"><span class="sw" style="background:#f4f4f4;color:#141414;border:1px solid #8a8a8a">White</span><span class="cs">Basic</span></div>
+            <div class="vcell"><span class="sw" style="background:#1eba3a;color:#0b2a12">Green</span><span class="cs">Good early find</span></div>
+            <div class="vcell"><span class="sw" style="background:#0070dd;color:#fff">Blue</span><span class="cs">Exciting</span></div>
+            <div class="vcell"><span class="sw" style="background:#a335ee;color:#fff">Purple</span><span class="cs">Best in slot</span></div>
+          </div>
+          <figcaption>Left to right: worse to better. Purple epics are rare and earned.</figcaption>
+        </figure>
+      </div></details>
+
+      <details class="topic" id="h-binding"><summary><span class="t">Soulbound, bind on equip, bind on pickup</span><span class="a">Soulbound items can only go to a vendor. Everything else can be sold or mailed.</span></summary><div class="tb">
+        <ul>
+          <li><b>Bind on pickup:</b> it's yours the moment you loot it.</li>
+          <li><b>Bind on equip:</b> tradeable until you put it on.</li>
+          <li><b>Soulbound:</b> can't be traded or sold on the auction house, not even to your own alts. Sell it to a vendor if you don't need it.</li>
+          <li>Found a cool unbound item for another class? Mail it to your alt for later.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-weapons"><summary><span class="t">Weapon skills and Weapon Masters</span><span class="a">Each weapon type levels as you hit with it. New types are learned from a Weapon Master.</span></summary><div class="tb">
+        <ul>
+          <li>Check your weapon skill levels in the character menu (<span class="kbd">C</span>), under Skills.</li>
+          <li>Each hit has a chance to raise that weapon's skill by 1. A low skill means you miss a lot against mobs your level.</li>
+          <li>Level a new weapon type early. If you wait, you may need to go to a low-level area just to swing at easy mobs.</li>
+          <li><b>"You do not have the required proficiency"?</b> Visit a Weapon Master. Example from the video: daggers cost 10 silver to learn.</li>
+          <li>Ask any Weapon Master "What can other weapon masters teach?" and they'll tell you who teaches what, and where.</li>
+          <li>Horde examples from the video: Sayoc in Thunder Bluff (maces, staves, guns), Hanashi next to him (bows, axes, staves, thrown) and Archibald in the Undercity War Quarter (crossbows, daggers, swords, polearms).</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-stats"><summary><span class="t">What do the stats do? (Paladin numbers)</span><span class="a">Strength gives you 2 attack power per point. Stamina gives 10 HP per point.</span></summary><div class="tb">
+        <div class="tbl"><table>
+          <thead><tr><th>Stat</th><th>What it does for a Paladin</th></tr></thead>
+          <tbody>
+            <tr><td><b>Strength</b></td><td>2 melee attack power per point. 14 attack power ≈ +1 DPS, so 7 Strength ≈ 1 DPS. That's all it does.</td></tr>
+            <tr><td><b>Agility</b></td><td>About 20 Agility = +1% physical crit and +1% dodge. Each point also gives 2 armor. It doesn't add melee attack power for Paladins.</td></tr>
+            <tr><td><b>Intellect</b></td><td>+15 max mana per point. About 54–60 Intellect = +1% spell crit. Spell crits do 150%, not 200%.</td></tr>
+            <tr><td><b>Stamina</b></td><td>The first 20 points give 1 HP each, then every point gives 10 HP. The best stat for tanks, PvP and Hardcore.</td></tr>
+            <tr><td><b>Spirit</b></td><td>Mana regen while you're <i>not</i> casting. Regen stops for 5 sec after each cast and ticks every 2 sec. Paladins need 5 Spirit per +1 regen. Also helps health regen out of combat.</td></tr>
+            <tr><td><b>Armor</b></td><td>Cuts physical damage, up to a 75% cap. A Priest or Shaman crit heal gives you +25% armor for 15 sec.</td></tr>
+            <tr><td><b>Resistances</b></td><td>Some spells land or miss (like Polymorph); others can be partly resisted (0, 25, 50, 75 or 100%). Mostly a tank concern in PvE; useful in PvP against, say, a Frost Mage.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small"><b>Armor calculator</b> (formula from the video: armor ÷ (armor + 400 + 85 × attacker level), capped at 75%)</p>
+        <div class="calc">
+          <label for="armorIn">Your armor<input id="armorIn" type="number" min="0" step="10" value="3000" inputmode="numeric"></label>
+          <label for="lvlIn">Attacker level<input id="lvlIn" type="number" min="1" max="63" step="1" value="60" inputmode="numeric"></label>
+          <div><div class="small muted">Physical damage reduction</div><output id="drOut" for="armorIn lvlIn">0%</output></div>
+        </div>
+      </div></details>
+    </div>
+
+    <div class="help-group" id="g-money">
+      <h3>Bags &amp; gold</h3>
+
+      <details class="topic" id="h-inventory"><summary><span class="t">My bags are always full</span><span class="a">Buy cheap bags early, sell junk in one click, and use an auction alt.</span></summary><div class="tb">
+        <ul>
+          <li><b>Bags first.</b> Early 8-slot bags can cost just a few silver on the auction house (Containers → Bags). Upgrade to 10, 12, 14 and 16 slots later.</li>
+          <li>Items with a little <b>gold coin</b> icon are junk. Click <b>Sell Junk</b> at any vendor to sell them all.</li>
+          <li>Each character has its own bank, so a <b>bank alt</b> gives you free extra storage. Buying more bank slots gets expensive fast; save that gold for your mount.</li>
+        </ul>
+        <figure class="fig">
+          <div class="steps" role="img" aria-label="Auction alt flow: main character mails items from a quest hub mailbox to an alt parked at the city auction house, which sells them and mails gold back">
+            <div><b>Your main</b><span>Questing, bags full</span></div>
+            <div><b>Quest hub mailbox</b><span>Mail your sellable loot</span></div>
+            <div><b>Auction alt</b><span>Parked by the city mailbox</span></div>
+            <div><b>Sells it</b><span>Mails the gold back</span></div>
+          </div>
+          <figcaption>Mail anything that isn't soulbound. You keep questing instead of running back to town.</figcaption>
+        </figure>
+      </div></details>
+
+      <details class="topic" id="h-ah"><summary><span class="t">Selling on the auction house</span><span class="a">Sell tab, right-click the item, and it auto-prices at the lowest listing.</span></summary><div class="tb">
+        <ol>
+          <li>Auction houses are only in the main cities.</li>
+          <li>Open the <b>Sell</b> tab and right-click an item in your bags. It fills in the current cheapest price for you, so you don't need to undercut by hand.</li>
+          <li>Click Auction.</li>
+          <li>Only list items that sell for more than the vendor pays. With Auctionator, the tooltip shows both prices (example from the video: 13 silver at the vendor vs 42 silver on the auction house).</li>
+        </ol>
+      </div></details>
+
+      <details class="topic" id="h-findnpc"><summary><span class="t">Can't find the bank, trainer or weapon master?</span><span class="a">Talk to a city guard. It marks the spot on your map.</span></summary><div class="tb">
+        <p>Talk to any guard in town and pick what you're looking for (bank, weapon master and so on). A flag appears on your map. Turn on minimap tracking (magnifying glass) to see the auction house, bank, innkeeper and mailbox.</p>
+      </div></details>
+    </div>
+
+    <div class="help-group" id="g-group">
+      <h3>Groups &amp; dungeons</h3>
+
+      <details class="topic" id="h-groups"><summary><span class="t">Finding a group</span><span class="a">Press I. List yourself, or browse and invite.</span></summary><div class="tb">
+        <ul>
+          <li>Press <span class="kbd">I</span>. To join: <b>Create Listing</b>, pick your role, the dungeon and a playstyle (Relaxed, or Learning if you're new), then List Self.</li>
+          <li>To build a group: open the <b>Group Browser</b>. Healers and tanks are the hardest to find, so invite them quickly. Hit Search again now and then to keep the list fresh.</li>
+          <li>Mix armor and weapon types in your group so every drop has someone to use it.</li>
+          <li>Questing: "kill 5 of these" goes twice as fast in a group, and everyone gets credit.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-dungeons"><summary><span class="t">Dungeons: when and how</span><span class="a">Start around 15. Go a couple of levels above the low end, and grab every dungeon quest first.</span></summary><div class="tb">
+        <ul>
+          <li>Start around level 15. There's a dungeon every few levels up to 60, plus 9 new ones in Forever.</li>
+          <li>New to a dungeon? Don't go at the bottom of its range. For a level 25 dungeon, go at about 27.</li>
+          <li><b>Pick up the dungeon's quests first</b> (usually 3–5, sometimes spread around the world). Turning them in can give a whole level.</li>
+          <li>Not sure which dungeons fit your level? Ask any innkeeper "Tell me about the dungeons I could explore".</li>
+          <li>Before raiding at 60, collect your <b>pre-raid best-in-slot</b> gear so you can pull your weight.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-portrait"><summary><span class="t">Right-click someone's portrait</span><span class="a">Focus, inspect, trade, whisper, follow, view talents.</span></summary><div class="tb">
+        <p>Right-click a player's portrait to set them as <b>focus</b> (used by focus macros), promote to leader, whisper, inspect gear, view talents, trade, or <b>follow</b>. Tell people before you auto-follow them so they don't lose you on a corner.</p>
+      </div></details>
+    </div>
+
+    <div class="help-group" id="g-prof">
+      <h3>Professions &amp; reputation</h3>
+
+      <details class="topic" id="h-professions"><summary><span class="t">How professions work</span><span class="a">2 primary plus all 3 secondary. Recipe color = skill-up chance.</span></summary><div class="tb">
+        <figure class="fig">
+          <svg viewBox="0 0 400 150" role="img" aria-label="Two primary profession slots and three secondary professions: First Aid, Cooking and Fishing">
+            <text x="0" y="15" font-size="13" font-weight="700" class="s-ink">Primary: pick 2</text>
+            <rect x="1" y="24" width="190" height="42" rx="8" class="s-surf s-goldst" stroke-width="2" stroke-dasharray="6 4"/><text x="96" y="50" text-anchor="middle" font-size="13" class="s-mut">Slot 1</text>
+            <rect x="209" y="24" width="190" height="42" rx="8" class="s-surf s-goldst" stroke-width="2" stroke-dasharray="6 4"/><text x="304" y="50" text-anchor="middle" font-size="13" class="s-mut">Slot 2</text>
+            <text x="0" y="94" font-size="13" font-weight="700" class="s-ink">Secondary: learn all 3</text>
+            <g font-size="13" font-weight="700" text-anchor="middle">
+              <rect x="1" y="103" width="124" height="42" rx="8" class="s-holy" stroke-width="1.5"/><text x="63" y="129" class="s-ink">First Aid</text>
+              <rect x="138" y="103" width="124" height="42" rx="8" class="s-holy" stroke-width="1.5"/><text x="200" y="129" class="s-ink">Cooking</text>
+              <rect x="275" y="103" width="124" height="42" rx="8" class="s-holy" stroke-width="1.5"/><text x="337" y="129" class="s-ink">Fishing</text>
+            </g>
+          </svg>
+          <figcaption><b>Crafting:</b> Tailoring, Leatherworking, Blacksmithing, Enchanting, Engineering, Alchemy. <b>Gathering:</b> Skinning, Mining, Herbalism. Any two of these, in any mix.</figcaption>
+        </figure>
+        <figure class="fig">
+          <div class="vis" role="img" aria-label="Skill-up chance by recipe color: grey 0, green 33, yellow 75, orange 100 percent, red not yet">
+            <div class="vcell"><span class="sw" style="background:#9aa0a8;color:#141414">0%</span><span class="cs">Grey</span></div>
+            <div class="vcell"><span class="sw" style="background:#2f8f47;color:#fff">33%</span><span class="cs">Green</span></div>
+            <div class="vcell"><span class="sw" style="background:#e8b923;color:#141414">75%</span><span class="cs">Yellow</span></div>
+            <div class="vcell"><span class="sw" style="background:#e07b1f;color:#141414">100%</span><span class="cs">Orange</span></div>
+            <div class="vcell"><span class="sw" style="background:#c8322a;color:#fff">Can't yet</span><span class="cs">Red</span></div>
+          </div>
+          <figcaption>Recipe or node name color = your chance to gain a skill point when you craft or gather it.</figcaption>
+        </figure>
+        <ul>
+          <li>Learn from a profession trainer before you can gather or craft. Each profession has 4 ranks: Apprentice, Journeyman, Expert and Artisan. Go back to the trainer at each cap (for example, 150).</li>
+          <li>An early starter-zone quest lets you pick Mining, Skinning or Herbalism. Use the reward item to unlock it.</li>
+          <li><b>Tools:</b> Mining needs a pickaxe and Skinning needs a skinning knife, both from vendors.</li>
+          <li><b>Level gathering as you go.</b> If you skip nodes, they turn red in higher zones and you'll have to go back.</li>
+          <li><b>Mining with a friend:</b> each of you hits the same node once, and each gets a chance to skill up from it.</li>
+          <li>You can abandon a profession anytime, but you lose all its progress.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-prof-list"><summary><span class="t">Which profession for what?</span><span class="a">Paladin pair from the video: Blacksmithing with Mining.</span></summary><div class="tb">
+        <div class="tbl"><table>
+          <thead><tr><th>Profession</th><th>Makes</th><th>Pairs with</th></tr></thead>
+          <tbody>
+            <tr><td><b>Blacksmithing</b> <span class="pill gold">Paladin</span></td><td>Mail armor up to about 40, then plate, plus melee weapons. Some of the best items in the game.</td><td>Mining</td></tr>
+            <tr><td><b>Tailoring</b></td><td>Cloth armor and <b>bags</b>, which everyone buys</td><td>Skinning or Enchanting</td></tr>
+            <tr><td><b>Leatherworking</b></td><td>Leather and mail armor, ammo bags</td><td>Skinning</td></tr>
+            <tr><td><b>Enchanting</b></td><td>Enchants, wands, consumables. Expensive to level, very profitable later. Armor gives more dust, weapons more essence.</td><td>A gathering profession or Tailoring</td></tr>
+            <tr><td><b>Engineering</b></td><td>Guns, ammo, bombs, gear. Great for PvP and min-maxing raids.</td><td>Mining</td></tr>
+            <tr><td><b>Alchemy</b></td><td>Potions, buffs, transmutes</td><td>Herbalism (and Fishing)</td></tr>
+            <tr><td><b>First Aid</b> <span class="pill ok">everyone</span></td><td>Bandages and now healing potions. Levels fast from cloth humanoids drop.</td><td>Free second slot</td></tr>
+            <tr><td><b>Cooking</b></td><td>Food and drinks, some with buffs. You need to stand near a fire.</td><td>Fishing</td></tr>
+            <tr><td><b>Fishing</b></td><td>Fish for cooking and alchemy, plus junk to sell. Works anywhere; a better rod and skill raise your catch chance.</td><td>Cooking, Alchemy</td></tr>
+          </tbody>
+        </table></div>
+      </div></details>
+
+      <details class="topic" id="h-reputation"><summary><span class="t">Reputation</span><span class="a">Optional grind. Honored with your home city = 10% off mounts.</span></summary><div class="tb">
+        <ul>
+          <li>You earn reputation by doing a faction's quests and killing its enemies (for example, Undercity quests raise Undercity rep).</li>
+          <li>It can unlock mounts, cosmetics and items. It's time-consuming and nothing is mandatory.</li>
+          <li><b>Honored</b> with your home city gives 10% off your mounts. Honored with another race lets you buy their mount.</li>
+        </ul>
+      </div></details>
+    </div>
+
+    <div class="help-group" id="g-travel">
+      <h3>Travel &amp; mounts</h3>
+
+      <details class="topic" id="h-travel"><summary><span class="t">Getting around faster</span><span class="a">Flight paths, hearthstone, zeppelins, mage portals, or even dying.</span></summary><div class="tb">
+        <ul>
+          <li><b>Flight paths:</b> talk to every flight master (green !) in every new town to unlock it. Flights are cheap. You'll forget at least once.</li>
+          <li><b>Hearthstone:</b> set your home at an innkeeper and teleport back there. It has a <b>1-hour cooldown</b>. Re-bind it each time you move to a new zone.</li>
+          <li><b>Zeppelins:</b> free rides between Kalimdor and the Eastern Kingdoms, from big towers outside major towns.</li>
+          <li><b>Mage portals:</b> to cities, for example at the end of a dungeon. The Mage must step through last, or the portal closes.</li>
+          <li><b>Dying on purpose:</b> if the graveyard sits next to your quest town, it can save a long walk.</li>
+        </ul>
+      </div></details>
+
+      <details class="topic" id="h-mounts"><summary><span class="t">Mounts: cost and speed</span><span class="a">Paladin: your level 40 mount is free from a class quest.</span></summary><div class="tb">
+        <figure class="fig">
+          <svg viewBox="0 0 400 236" role="img" aria-label="Movement speed: on foot normal, level 40 mount 60 percent faster for 100 gold, level 60 mount 100 percent faster for 1000 gold">
+            <text x="0" y="15" font-size="13" font-weight="700" class="s-ink">On foot</text>
+            <rect x="1" y="22" width="200" height="26" rx="4" class="s-mut" opacity=".5"/>
+            <text x="208" y="40" font-size="13" class="s-ink">normal speed</text>
+            <text x="0" y="72" font-size="13" font-weight="700" class="s-ink">Level 40 mount</text>
+            <rect x="1" y="79" width="320" height="26" rx="4" fill="#2f6fc0"/>
+            <text x="312" y="97" font-size="13" font-weight="700" fill="#ffffff" text-anchor="end">+60% speed · 100g</text>
+            <text x="0" y="129" font-size="13" font-weight="700" class="s-ink">Level 60 epic mount</text>
+            <rect x="1" y="136" width="398" height="26" rx="4" fill="#8a2ccf"/>
+            <text x="390" y="154" font-size="13" font-weight="700" fill="#ffffff" text-anchor="end">+100% speed · 1000g</text>
+            <text x="0" y="188" font-size="12.5" class="s-ink"><tspan font-weight="700">Discounts:</tspan> −10% at Honored with your home</text>
+            <text x="0" y="205" font-size="12.5" class="s-ink">city, another −10% at PvP rank 3.</text>
+            <text x="0" y="229" font-size="13" class="s-gold" font-weight="700">Paladin: first mount free from a level 40 quest.</text>
+          </svg>
+        </figure>
+        <ul>
+          <li>Buy from your race's riding instructor. In Forever, buying the riding skill now gives you the mount too: one purchase.</li>
+          <li>Have about 80–90 gold ready as you near 40, so you can train the moment you can. (As a Paladin, you can save that for the epic mount instead.)</li>
+          <li>Like another race's mount? Get Honored with that faction to buy it.</li>
+        </ul>
+      </div></details>
+    </div>
+
+    <p class="empty" id="helpEmpty">Nothing matched. Try a shorter word, like "bag", "mount" or "XP".</p>
+
+    <p class="help-note">This window is based only on the WoW Forever beginner guide video you uploaded (the sponsor segment is skipped). The pictures are drawn diagrams, not game screenshots. Blizzard keeps adjusting things like Legacy and racials, so check in-game tooltips if something looks different.</p>
+  </div>
+</div>
+</dialog>
+
+<script>
+(function(){
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function clean(t){ return t.replace(/\s+/g, ' ').trim(); }
+  function textOf(el){ var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), out = [], n; while((n = w.nextNode())) out.push(n.nodeValue); return clean(out.join(' ')).replace(/ ([,.;:)])/g, '$1'); }
+
+  // ---------- Copy buttons ----------
+  $$('.macro').forEach(function(m){
+    var btn = $('button.copy', m), pre = $('pre', m);
+    if(!btn || !pre) return;
+    btn.addEventListener('click', function(){
+      var done = function(ok){
+        btn.textContent = ok ? 'Copied' : 'Select and copy';
+        btn.classList.toggle('done', ok);
+        setTimeout(function(){ btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1800);
+        if(!ok){ var r = document.createRange(); r.selectNodeContents(pre); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+      };
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(pre.textContent).then(function(){ done(true); }, function(){ done(false); }); }
+        else done(false);
+      }catch(e){ done(false); }
+    });
+  });
+
+  // ---------- Saved checklists ----------
+  function savedChecks(selector, key, onChange){
+    var boxes = $$(selector), saved = {};
+    try{ saved = JSON.parse(localStorage.getItem(key) || '{}') || {}; }catch(e){ saved = {}; }
+    boxes.forEach(function(b){
+      if(saved[b.id]) b.checked = true;
+      b.addEventListener('change', function(){
+        saved[b.id] = b.checked;
+        try{ localStorage.setItem(key, JSON.stringify(saved)); }catch(e){}
+        if(onChange) onChange(boxes);
+      });
+    });
+    if(onChange) onChange(boxes);
+  }
+  savedChecks('#milestones input', 'wowf-paladin-milestones', function(boxes){
+    var n = boxes.filter(function(b){ return b.checked; }).length;
+    $('#pct').textContent = n + ' of ' + boxes.length + ' done';
+    $('#barfill').style.width = (boxes.length ? n / boxes.length * 100 : 0) + '%';
+  });
+  savedChecks('#settingsList input', 'wowf-help-settings');
+
+  // ---------- Armor calculator ----------
+  var aIn = $('#armorIn'), lIn = $('#lvlIn'), dOut = $('#drOut');
+  function calc(){
+    var armor = Math.max(0, Number(aIn.value) || 0), lvl = Math.max(1, Number(lIn.value) || 1);
+    var dr = Math.min(armor / (armor + 400 + 85 * lvl), 0.75);
+    dOut.textContent = (dr * 100).toFixed(1) + '%';
+  }
+  aIn.addEventListener('input', calc); lIn.addEventListener('input', calc); calc();
+
+  // ---------- Views and sub-tabs ----------
+  var views = $$('.view');
+  var navLinks = $$('nav.jump a[href^="#"]');
+  var names = {};
+  navLinks.forEach(function(a){ names[a.getAttribute('href').slice(1)] = a.textContent.trim(); });
+  var current = null, lastPanel = {}, pendingPanel = null;
+
+  function showPanel(view, pid){
+    var tabs = $$('.subtabs button', view);
+    if(!tabs.length) return;
+    var panels = $$('.panel', view);
+    var ok = pid && panels.some(function(p){ return p.id === pid; });
+    if(!ok) pid = lastPanel[view.id] || tabs[0].getAttribute('data-p');
+    panels.forEach(function(p){ p.hidden = p.id !== pid; });
+    tabs.forEach(function(t){
+      var on = t.getAttribute('data-p') === pid;
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    lastPanel[view.id] = pid;
+  }
+  function showView(id, pid){
+    var v = document.getElementById(id);
+    if(!v || views.indexOf(v) === -1){ v = document.getElementById('quick'); id = 'quick'; }
+    views.forEach(function(x){ x.hidden = x !== v; });
+    document.body.classList.toggle('home', id === 'quick');
+    navLinks.forEach(function(a){ a.classList.toggle('on', a.getAttribute('href') === '#' + id); });
+    showPanel(v, pid);
+    current = id;
+    window.scrollTo(0, 0);
+    var on = $('nav.jump a.on');
+    if(on){ try{ on.scrollIntoView({block:'nearest', inline:'center'}); }catch(e){} }
+  }
+  $$('.subtabs').forEach(function(bar){
+    var view = bar.closest('.view');
+    $$('button', bar).forEach(function(b){
+      b.addEventListener('click', function(){
+        showPanel(view, b.getAttribute('data-p'));
+        var top = view.getBoundingClientRect().top + window.scrollY - 60;
+        if(window.scrollY > top) window.scrollTo(0, Math.max(0, top));
+      });
+    });
+  });
+  function goView(id, pid){
+    if(current === id){ showView(id, pid); return; }
+    pendingPanel = pid || null;
+    location.hash = id;
+  }
+
+  // ---------- Help window ----------
+  var dlg = $('#help'), hbody = $('#helpBody'), hsearch = $('#helpSearch'), hempty = $('#helpEmpty');
+  var topics = $$('#help details.topic'), groups = $$('#help .help-group'), hchips = $$('#help [data-jump]');
+  var curGroup = 'g-fix', wasSearching = false;
+
+  function openHelp(){ if(!dlg.open){ try{ dlg.showModal(); }catch(e){ dlg.setAttribute('open', ''); } } }
+  function closeHelp(){ if(dlg.open){ try{ dlg.close(); }catch(e){ dlg.removeAttribute('open'); } } }
+  dlg.addEventListener('close', function(){
+    if(location.hash === '#help'){ try{ history.replaceState(null, '', '#' + (current || 'quick')); }catch(e){} }
+  });
+  $('#helpOpen').addEventListener('click', openHelp);
+  $('#helpClose').addEventListener('click', closeHelp);
+  dlg.addEventListener('click', function(e){ if(e.target === dlg) closeHelp(); });
+
+  function applyHelp(){
+    var q = hsearch.value.trim().toLowerCase();
+    if(q){
+      var any = false;
+      topics.forEach(function(t){
+        var hit = t.textContent.toLowerCase().indexOf(q) !== -1;
+        t.hidden = !hit; t.classList.toggle('hit', hit); t.open = hit;
+        if(hit) any = true;
+      });
+      groups.forEach(function(g){
+        g.hidden = g.id === 'g-fix' ? true : !g.querySelector('details.topic:not([hidden])');
+      });
+      hempty.style.display = any ? 'none' : 'block';
+      wasSearching = true;
+    } else {
+      topics.forEach(function(t){ t.hidden = false; t.classList.remove('hit'); if(wasSearching) t.open = false; });
+      groups.forEach(function(g){ g.hidden = !(curGroup === 'all' || g.id === curGroup); });
+      hempty.style.display = 'none';
+      wasSearching = false;
+    }
+    hchips.forEach(function(c){ c.classList.toggle('on', !q && c.getAttribute('data-jump') === curGroup); });
+  }
+  function setGroup(g){
+    curGroup = g; hsearch.value = '';
+    topics.forEach(function(t){ t.open = false; });
+    applyHelp(); hbody.scrollTop = 0;
+  }
+  function helpGoTo(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var g = el.closest('.help-group');
+    hsearch.value = ''; curGroup = g ? g.id : 'all';
+    applyHelp();
+    el.open = true;
+    setTimeout(function(){ el.scrollIntoView({block:'start', behavior: reduce ? 'auto' : 'smooth'}); }, 30);
+  }
+  hchips.forEach(function(c){ c.addEventListener('click', function(){ setGroup(c.getAttribute('data-jump')); }); });
+  $$('#help [data-go]').forEach(function(b){ b.addEventListener('click', function(){ helpGoTo(b.getAttribute('data-go')); }); });
+  hsearch.addEventListener('input', function(){ applyHelp(); hbody.scrollTop = 0; });
+  setGroup('g-fix');
+
+  // ---------- Whole-guide search ----------
+  var index = [];
+  views.forEach(function(v){
+    var where = names[v.id] || v.id;
+    var panels = $$('.panel', v);
+    if(panels.length){
+      panels.forEach(function(p){
+        index.push({title: p.getAttribute('data-title'), where: where, text: textOf(p), go: function(){ goView(v.id, p.id); }});
+      });
+    } else {
+      var h = $('h2', v);
+      index.push({title: h ? clean(h.textContent) : where, where: where, text: textOf(v), go: function(){ goView(v.id); }});
+    }
+  });
+  topics.forEach(function(t){
+    index.push({title: clean($('.t', t).textContent), where: 'Stuck? Help', text: textOf(t), go: function(){ openHelp(); helpGoTo(t.id); }});
+  });
+
+  var gsBtn = $('#gsBtn'), gsRow = $('#gsRow'), gsIn = $('#gsIn'), gsRes = $('#gsRes');
+  function openSearch(){ gsRow.hidden = false; gsBtn.setAttribute('aria-expanded', 'true'); gsIn.focus(); }
+  function closeSearch(){ gsRow.hidden = true; gsBtn.setAttribute('aria-expanded', 'false'); gsIn.value = ''; gsRes.hidden = true; gsRes.innerHTML = ''; }
+  gsBtn.addEventListener('click', function(){ if(gsRow.hidden) openSearch(); else closeSearch(); });
+  $('#homeSearch').addEventListener('click', function(){ window.scrollTo(0, 0); openSearch(); });
+  function runSearch(){
+    var q = gsIn.value.trim().toLowerCase();
+    gsRes.innerHTML = '';
+    if(q.length < 2){ gsRes.hidden = true; return; }
+    var toks = q.split(/\s+/);
+    var hits = index.map(function(e){
+      var tl = e.title.toLowerCase(), tx = e.text.toLowerCase();
+      var all = toks.every(function(t){ return tl.indexOf(t) !== -1 || tx.indexOf(t) !== -1; });
+      if(!all) return null;
+      var score = 0;
+      toks.forEach(function(t){ if(tl.indexOf(t) !== -1) score += 20; score += Math.min(tx.split(t).length - 1, 10); });
+      return {e: e, score: score};
+    }).filter(Boolean).sort(function(a, b){ return b.score - a.score; }).slice(0, 12);
+    if(!hits.length){
+      gsRes.innerHTML = '<p class="gs-none">Nothing found. Try one word, like "taunt", "mount" or "bags".</p>';
+      gsRes.hidden = false; return;
+    }
+    hits.forEach(function(h){
+      var tx = h.e.text, i = tx.toLowerCase().indexOf(toks[0]);
+      var s = Math.max(0, i - 50);
+      var snip = (s > 0 ? '…' : '') + tx.slice(s, s + 130) + (s + 130 < tx.length ? '…' : '');
+      var b = document.createElement('button'); b.type = 'button';
+      var sm = document.createElement('small'); sm.textContent = h.e.where;
+      var bb = document.createElement('b'); bb.textContent = h.e.title;
+      var sp = document.createElement('span'); sp.textContent = snip;
+      b.appendChild(sm); b.appendChild(bb); b.appendChild(sp);
+      b.addEventListener('click', function(){ closeSearch(); h.e.go(); });
+      gsRes.appendChild(b);
+    });
+    gsRes.hidden = false;
+  }
+  gsIn.addEventListener('input', runSearch);
+  gsIn.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeSearch();
+    if(e.key === 'Enter'){ var f = $('button', gsRes); if(f) f.click(); }
+  });
+
+  // ---------- Previous / next buttons ----------
+  views.forEach(function(v, i){
+    var pg = document.createElement('div'); pg.className = 'pager';
+    function link(target, cls, label){
+      var a = document.createElement('a'); a.href = '#' + target.id; a.className = cls;
+      var s = document.createElement('span'); s.textContent = label;
+      var b = document.createElement('b'); b.textContent = names[target.id] || target.id;
+      a.appendChild(s); a.appendChild(b); pg.appendChild(a);
+    }
+    if(i > 0) link(views[i - 1], 'prev', '← Previous');
+    if(i < views.length - 1) link(views[i + 1], 'next', 'Next →');
+    ($('.wrap', v) || v).appendChild(pg);
+  });
+
+  // ---------- Router ----------
+  function route(){
+    var h = location.hash.replace('#', '');
+    if(h === 'help'){ if(!current) showView('quick'); openHelp(); return; }
+    var p = pendingPanel; pendingPanel = null;
+    closeHelp();
+    showView(h || 'quick', p);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+})();
+</script>
+</body>
+</html>

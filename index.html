@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hawary's Guides: WoW Forever</title>
+<style>
+:root{--bg:#f6f4ef;--surface:#fff;--ink:#1d1d1f;--muted:#5f6368;--line:#e3dfd6;--gold:#8a5d00}
+@media (prefers-color-scheme: dark){:root{--bg:#121212;--surface:#1c1c1e;--ink:#f2f2f2;--muted:#a1a1a6;--line:#2c2c2e;--gold:#e2b54c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:48px 20px 64px}
+.kicker{font:600 13px ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font:800 clamp(30px,6vw,44px)/1.1 Georgia,"Times New Roman",serif;margin:8px 0 12px}
+h1 span{color:var(--gold)}
+p.lead{color:var(--muted);margin:0 0 32px}
+.grid{display:grid;gap:14px}
+a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:14px;padding:18px 20px;transition:transform .15s}
+a.card:hover,a.card:focus-visible{transform:translateY(-2px)}
+a.card b{display:block;font-size:20px}
+a.card span{color:var(--muted);font-size:15px}
+.paladin{--c:#f58cba}.warlock{--c:#8788ee}.hunter{--c:#aad372}
+footer{margin-top:40px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">WoW Forever · Level 1 to 60</div>
+  <h1><span>Hawary's</span> Guides</h1>
+  <p class="lead">Class guides from character creation to endgame: builds, macros, gear, leveling and a "Stuck? Help" window. Each guide is a single page that works on phone and desktop.</p>
+  <div class="grid">
+    <a class="card paladin" href="paladin.html"><b>Paladin</b><span>Ret, Prot, Holy and Shockadin builds with S/A/B/C ratings</span></a>
+    <a class="card warlock" href="warlock.html"><b>Warlock</b><span>Leveling, demons, builds, macros and gear</span></a>
+    <a class="card hunter" href="hunter.html"><b>Hunter</b><span>Leveling, pets, builds, macros and gear</span></a>
+  </div>
+  <footer>Builds and ratings change as patches land. Each guide lists its sources at the bottom.</footer>
+</main>
+</body>
+</html>
