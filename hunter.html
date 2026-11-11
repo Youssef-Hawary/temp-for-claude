@@ -794,18 +794,13 @@ footer{border-top:1px solid var(--line);margin-top:48px;padding:28px 0 60px;back
   <div class="subtabs" role="tablist"><button type="button" role="tab" data-p="m-open">Hawary's opener</button><button type="button" role="tab" data-p="m-all">Shots &amp; pet</button><button type="button" role="tab" data-p="m-ret">Melee &amp; aspects</button><button type="button" role="tab" data-p="m-prot">Defensive &amp; utility</button></div>
   <div class="stack">
     <div class="panel" id="m-open" data-title="Hawary's opener macro: pet, Hunter's Mark, Elune's Light, Concussive, Serpent Sting, Arcane Shot">
-    <div class="macro"><div class="mh"><div><b>Hawary's opener (one button)</b><p>Press it again and again. Each press: targets the nearest enemy if you have none, sends your pet, then fires the next step: Hunter's Mark, Elune's Light, Concussive Shot, Serpent Sting, Arcane Shot. A new target starts it over from Hunter's Mark.</p></div><button class="copy" type="button">Copy</button></div>
+    <div class="macro"><div class="mh"><div><b>Hawary's opener (one button)</b><p>Keep pressing it. It targets the nearest enemy if you have none and sends your pet. Press 1: Hunter's Mark plus Elune's Light. Then Concussive Shot, Serpent Sting, Arcane Shot. A new target starts over.</p></div><button class="copy" type="button">Copy</button></div>
 <pre>#showtooltip
 /targetenemy [noexists][dead][help]
 /petattack [harm,nodead]
-/castsequence reset=target Hunter's Mark, Elune's Light, Concussive Shot, Serpent Sting, Arcane Shot</pre></div>
-    <div class="macro"><div class="mh"><div><b>Opener without the cooldown stall</b><p>Same order, but Elune's Light goes on <b>Ctrl</b>. Use this one if you're not a Night Elf, or once you notice the first macro waiting on Elune's Light.</p></div><button class="copy" type="button">Copy</button></div>
-<pre>#showtooltip
-/targetenemy [noexists][dead][help]
-/petattack [harm,nodead]
-/cast [mod:ctrl] Elune's Light
+/cast Elune's Light
 /castsequence reset=target Hunter's Mark, Concussive Shot, Serpent Sting, Arcane Shot</pre></div>
-    <div class="callout warn small"><b>Why one press per step:</b> WoW only lets a macro fire one spell on the global cooldown per press, so the steps can't all go off at once. <b>/castsequence</b> moves one step forward each time a spell actually casts.<br><b>Things to know:</b> Elune's Light is the Night Elf racial (+10% crit for 15 sec). If it's still on cooldown, the first macro waits on that step until it's ready, so use the Ctrl version then. After Arcane Shot the sequence loops back to Hunter's Mark on the same target; switch targets or keep pressing. Spell names must match your spellbook exactly. Keep Auto Shot going with the macro in "Shots &amp; pet".</div>
+    <div class="callout warn small"><b>Why it's built this way:</b> a macro can only fire one shot per press, so <b>/castsequence</b> moves one step forward each time a shot actually casts. Elune's Light sits on its own line, so it fires whenever it's ready and never blocks the shots. If you're not a Night Elf, that line just does nothing. While it's on cooldown you may see a "not ready yet" message; that's harmless.<br>Spell names must match your spellbook exactly. Keep Auto Shot going with the macro in "Shots &amp; pet".</div>
     </div>
     <div class="panel" id="m-all" data-title="Hunter shot and pet macros">
     <div class="macro"><div class="mh"><div><b>Auto Shot that never turns itself off</b><p>The ! means pressing it again won't stop your Auto Shot. Spam it as you switch targets.</p></div><button class="copy" type="button">Copy</button></div>
