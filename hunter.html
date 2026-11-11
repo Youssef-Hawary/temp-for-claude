@@ -262,6 +262,29 @@ nav.jump .wrap.gs-row{display:grid;gap:8px;padding-top:0;padding-bottom:12px;ove
 .pager a b{font-size:15px}
 .chips button.on{background:var(--gold);border-color:var(--gold);color:var(--bg)}
 
+.grade{display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:7px;font:800 15px var(--body);line-height:1}
+.grade.s{background:#e8b923;color:#1a1a1a}
+.grade.a{background:#2f8f47;color:#fff}
+.grade.b{background:#2c5bb0;color:#fff}
+.grade.c{background:#7c828d;color:#fff}
+.ratings{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--muted)}
+.ratings span{display:inline-flex;align-items:center;gap:6px}
+table.rate td{vertical-align:middle}
+table.rate td .src{margin-top:4px}
+.card.spec-shock{border-top:4px solid #8a5bd6}
+.pill.shock{background:#efe7fb;color:#6b3fb8}
+:root[data-theme="dark"] .pill.shock{background:#251b38;color:#c9a8ff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pill.shock{background:#251b38;color:#c9a8ff}}
+@media (max-width:640px){
+  table.rate{min-width:0}
+  table.rate thead{display:none}
+  table.rate tr{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 12px;padding:14px;border-bottom:1px solid var(--line)}
+  table.rate tbody tr:last-child{border-bottom:0}
+  table.rate td{display:block;border:0;padding:0;background:none}
+  table.rate td:first-child{grid-column:1/-1}
+  table.rate.cmp td:nth-child(3){grid-column:span 2}
+  table.rate td[data-l]:not([data-l=""])::before{content:attr(data-l);display:block;font:700 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+}
 footer{border-top:1px solid var(--line);margin-top:48px;padding:28px 0 60px;background:var(--surface)}
 .sources{columns:2 260px;column-gap:24px;font-size:14px;padding-left:18px}
 .sources li{break-inside:avoid;margin-bottom:6px}
@@ -768,8 +791,22 @@ footer{border-top:1px solid var(--line);margin-top:48px;padding:28px 0 60px;back
     <h2>Macros, ready to paste</h2>
     <p class="muted">Open the macro window with <code>/macro</code>, make a new macro, paste, and drag it to your bar. "Ctrl" means hold Ctrl while you press the key.</p>
   </div>
-  <div class="subtabs" role="tablist"><button type="button" role="tab" data-p="m-all">Shots &amp; pet</button><button type="button" role="tab" data-p="m-ret">Melee &amp; aspects</button><button type="button" role="tab" data-p="m-prot">Defensive &amp; utility</button></div>
+  <div class="subtabs" role="tablist"><button type="button" role="tab" data-p="m-open">Hawary's opener</button><button type="button" role="tab" data-p="m-all">Shots &amp; pet</button><button type="button" role="tab" data-p="m-ret">Melee &amp; aspects</button><button type="button" role="tab" data-p="m-prot">Defensive &amp; utility</button></div>
   <div class="stack">
+    <div class="panel" id="m-open" data-title="Hawary's opener macro: pet, Hunter's Mark, Elune's Light, Concussive, Serpent Sting, Arcane Shot">
+    <div class="macro"><div class="mh"><div><b>Hawary's opener (one button)</b><p>Press it again and again. Each press: targets the nearest enemy if you have none, sends your pet, then fires the next step: Hunter's Mark, Elune's Light, Concussive Shot, Serpent Sting, Arcane Shot. A new target starts it over from Hunter's Mark.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip
+/targetenemy [noexists][dead][help]
+/petattack [harm,nodead]
+/castsequence reset=target Hunter's Mark, Elune's Light, Concussive Shot, Serpent Sting, Arcane Shot</pre></div>
+    <div class="macro"><div class="mh"><div><b>Opener without the cooldown stall</b><p>Same order, but Elune's Light goes on <b>Ctrl</b>. Use this one if you're not a Night Elf, or once you notice the first macro waiting on Elune's Light.</p></div><button class="copy" type="button">Copy</button></div>
+<pre>#showtooltip
+/targetenemy [noexists][dead][help]
+/petattack [harm,nodead]
+/cast [mod:ctrl] Elune's Light
+/castsequence reset=target Hunter's Mark, Concussive Shot, Serpent Sting, Arcane Shot</pre></div>
+    <div class="callout warn small"><b>Why one press per step:</b> WoW only lets a macro fire one spell on the global cooldown per press, so the steps can't all go off at once. <b>/castsequence</b> moves one step forward each time a spell actually casts.<br><b>Things to know:</b> Elune's Light is the Night Elf racial (+10% crit for 15 sec). If it's still on cooldown, the first macro waits on that step until it's ready, so use the Ctrl version then. After Arcane Shot the sequence loops back to Hunter's Mark on the same target; switch targets or keep pressing. Spell names must match your spellbook exactly. Keep Auto Shot going with the macro in "Shots &amp; pet".</div>
+    </div>
     <div class="panel" id="m-all" data-title="Hunter shot and pet macros">
     <div class="macro"><div class="mh"><div><b>Auto Shot that never turns itself off</b><p>The ! means pressing it again won't stop your Auto Shot. Spam it as you switch targets.</p></div><button class="copy" type="button">Copy</button></div>
 <pre>#showtooltip Auto Shot
